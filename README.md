@@ -6,6 +6,8 @@ Let user manage cookie usage
 
 ## Usage
 
+- Explain how this works together with FHCookieGuard bundle
+
 ## Config options
 
 ## Styling components
@@ -20,4 +22,4 @@ This library supports the latest 2 versions of all modern browsers. But support 
 
 * Readme
 * Add notification styling component
-* Add .css builds  
+* Add .css builds

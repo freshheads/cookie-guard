@@ -1,11 +1,15 @@
 {
-  "name": "fh-cookie-guard",
+  "name": "@freshheads/fh-cookie-guard",
   "version": "0.1.0",
-  "private": true,
   "description": "Let user manage cookie usage",
   "main": "lib/FHCookieGuard.js",
+  "files": [
+    "lib",
+    "src"
+  ],
   "scripts": {
     "build": "webpack --mode=production",
+    "prepublish": "npm run build",
     "dev": "webpack --watch --mode=development"
   },
   "repository": {
@@ -14,6 +18,11 @@
   },
   "engines": {
     "node": ">= 6.9.0 || >= 8.9.0"
+  },
+  "author": "Freshheads",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fh-cookie-guard/maatcss/issues"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
