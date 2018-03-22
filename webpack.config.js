@@ -19,9 +19,12 @@ const config = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['es2015', {
-                                modules: false
-                            }]
+                            ['env', {
+                                    'targets': {
+                                        'browsers': ['last 2 versions', 'ie >= 11']
+                                    }
+                                }
+                            ]
                         ]
                     }
                 }]
