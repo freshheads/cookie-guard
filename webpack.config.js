@@ -2,7 +2,6 @@ const path = require('path');
 
 const config = {
     entry: __dirname + '/src/js/index.js',
-    devtool: 'source-map',
     output: {
         path: __dirname + '/lib',
         filename: 'FHCookieGuard.js',
@@ -22,7 +21,8 @@ const config = {
                             ['env', {
                                     'targets': {
                                         'browsers': ['last 2 versions', 'ie >= 11']
-                                    }
+                                    },
+                                    'modules': false
                                 }
                             ]
                         ]
