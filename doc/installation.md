@@ -1,5 +1,5 @@
 # Installation
 
 ```
-npm install @freshheads/fh-cookie-guard
+npm install @freshheads/cookie-guard
 ```
