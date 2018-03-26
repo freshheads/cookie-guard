@@ -22,14 +22,14 @@ new FHCookieGuard('.js-cookie-alert', {
 <div class="cookie-alert js-cookie-alert" data-excluded-page-urls="{{ excludedPages|json_encode }}" role="alertdialog" aria-labelledby="cookie-alert-title" aria-describedby="cookie-alert-description" aria-hidden="true">
     <div class="cookie-alert__content">
         <div class="cookie-alert__header">
-            <h2 class="cookie-alert__title" id="cookie-alert-title">Cookies gebruik</h2>
+            <h2 class="cookie-alert__title" id="cookie-alert-title">Cookie usage</h2>
         </div>
         <p class="cookie-alert__description" id="cookie-alert-description">
-            We gebruiken cookies om het gebruik van de website te analyseren, zo kunnen wij het gebruiksgemak voor u verbeteren.
-            <a href="{{ path('cookies'}) }}" class="cookie-alert__link" target="_blank">Meer informatie</a> over het gebruik van de cookies.
+            We use cookies to analyse the website, so we can further improve the user experience. Can we use cookies?
+            <a href="{{ path('cookies'}) }}" class="cookie-alert__link" target="_blank">Read more information</a> about how we use cookies.
         </p>
-        <button class="button button--secondary js-cookie-alert-accept">Prima, ik geef toestemming</button>
-        <button class="button button--link js-cookie-alert-refuse">Nee, bedankt</button>
+        <button class="button button--secondary js-cookie-alert-accept">Yes, continue</button>
+        <button class="button button--link js-cookie-alert-refuse">No, continue without cookies</button>
     </div>
 </div>
 ```
