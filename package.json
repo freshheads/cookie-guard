@@ -36,5 +36,10 @@
   },
   "dependencies": {
     "js-cookie": "^2.2.0"
+  },
+  "homepage": "https://github.com/freshheads/fh-cookie-guard#readme",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib"
   }
 }
