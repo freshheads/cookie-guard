@@ -1,16 +1,21 @@
 # FHCookieGuard
 
-Let user manage cookie usage
+This library provides a cookie alert in which the user can accept or decline the usage of cookies on the website.
+When accepting it will load guarded scripts in meta tags.
 
-## Installation
+## Features
 
-## Usage
+* Options for cookie name, expire days, callback etc.
+* Transform data-content attribute to working script tag
+* Exclude cookie message on certain pages
+* Ready to use sass styling components for a variation of cookie notifications and popups
+* Ready to use twig example to be used with styling 
 
-- Explain how this works together with FHCookieGuard bundle
+## Documentation
 
-## Config options
-
-## Styling components
+- [Installation](doc/installation.md)
+- [Usage](doc/usage.md)
+- [Configuration](doc/configuration.md)
 
 ## Browser support
 
@@ -20,6 +25,4 @@ This library supports the latest 2 versions of all modern browsers. But support 
 
 ## Todo
 
-* Readme
 * Add notification styling component
-* Add .css builds
