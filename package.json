@@ -1,5 +1,5 @@
 {
-  "name": "@freshheads/fh-cookie-guard",
+  "name": "@freshheads/cookie-guard",
   "version": "0.1.1",
   "description": "Let user manage cookie usage",
   "main": "lib/FHCookieGuard.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/freshheads/fh-cookie-guard.git"
+    "url": "git+https://github.com/freshheads/cookie-guard.git"
   },
   "engines": {
     "node": ">= 6.9.0 || >= 8.9.0"
@@ -22,7 +22,7 @@
   "author": "Freshheads",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fh-cookie-guard/maatcss/issues"
+    "url": "https://github.com/cookie-guard/maatcss/issues"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -37,7 +37,7 @@
   "dependencies": {
     "js-cookie": "^2.2.0"
   },
-  "homepage": "https://github.com/freshheads/fh-cookie-guard#readme",
+  "homepage": "https://github.com/freshheads/cookie-guard#readme",
   "directories": {
     "doc": "doc",
     "lib": "lib"
