@@ -1,6 +1,6 @@
 {
   "name": "@freshheads/cookie-guard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Let user manage cookie usage",
   "main": "lib/FHCookieGuard.js",
   "files": [
