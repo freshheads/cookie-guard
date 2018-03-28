@@ -3,7 +3,7 @@
 1. Import FHCookieGuard
 
 ```javascript
-   import FHCookieGuard from 'fh-cookie-guard';
+   import FHCookieGuard from '@freshheads/cookie-guard';
 ```
 
 2. Initialize
@@ -61,7 +61,7 @@ Now it's guarded and the scripts will only be injected when the user accepts the
 You can use on of the predefined styles or create your own.
 
 ```scss
-@import "~fh-cookie-guard/src/scss/popup";
+@import "~@freshheads/cookie-guard/src/scss/popup";
 ```
 
 
