@@ -42,29 +42,11 @@ $cookie-alert-title-font-size: 2rem !default;
 }
 
 .cookie-alert__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-bottom: 1rem;
-}
-
-.cookie-alert__close {
-    display: flex;
-    align-items: center;
-    flex: none;
-    cursor: pointer;
-}
-
-.cookie-alert__icon {
-    display: block;
-    width: 0.8em;
-    height: 0.8rem;
-    margin-left: 0.5rem;
 }
 
 .cookie-alert__title {
     display: block;
-    flex: none;
     margin: 0;
     font-size: $cookie-alert-title-font-size;
 }
