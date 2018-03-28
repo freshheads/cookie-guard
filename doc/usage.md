@@ -60,10 +60,11 @@ Now it's guarded and the scripts will only be injected when the user accepts the
 
 5. Set styling
 
-You can use on of the predefined styles or create your own.
+You can use one of the predefined styles or create your own.
 
 ```scss
 @import "~@freshheads/cookie-guard/src/scss/popup";
+@import "~@freshheads/cookie-guard/src/scss/notification";
 ```
 
 
