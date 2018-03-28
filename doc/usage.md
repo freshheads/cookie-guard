@@ -28,8 +28,10 @@ new FHCookieGuard('.js-cookie-alert', {
             We use cookies to analyse the website, so we can further improve the user experience. Can we use cookies?
             <a href="{{ path('cookies'}) }}" class="cookie-alert__link" target="_blank">Read more information</a> about how we use cookies.
         </p>
-        <button class="button button--secondary js-cookie-alert-accept">Yes, continue</button>
-        <button class="button button--link js-cookie-alert-refuse">No, continue without cookies</button>
+        <div class="cookie-alert__actions">
+            <button class="button button--secondary js-cookie-alert-accept">Yes, continue</button>
+            <button class="button button--link js-cookie-alert-refuse">No, continue without cookies</button>
+        </div>
     </div>
 </div>
 ```
@@ -58,10 +60,11 @@ Now it's guarded and the scripts will only be injected when the user accepts the
 
 5. Set styling
 
-You can use on of the predefined styles or create your own.
+You can use one of the predefined styles or create your own.
 
 ```scss
 @import "~@freshheads/cookie-guard/src/scss/popup";
+@import "~@freshheads/cookie-guard/src/scss/notification";
 ```
 
 

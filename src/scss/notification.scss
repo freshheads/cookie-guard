@@ -1,6 +1,9 @@
 $cookie-alert-bg-color: #fff !default;
-$cookie-alert-overlay-color: rgba(#000, 0.8) !default;
 $cookie-alert-title-font-size: 2rem !default;
+$cookie-alert-max-container-width: 1260px !default;
+$cookie-alert-position: 'top' !default;
+$cookie-alert-transition-in-time: 0.25s !default; // set 0s to disable
+$cookie-alert-transition-out-time: 0.25s !default; // set 0s to disable
 
 .cookie-alert {
     position: fixed;
@@ -10,35 +13,27 @@ $cookie-alert-title-font-size: 2rem !default;
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 100%;
     transform: translateY(-100%);
-    background-color: $cookie-alert-overlay-color;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0s 0.4s;
+    background-color: $cookie-alert-bg-color;
+    transition: transform $cookie-alert-transition-out-time ease-out;
+
+    @if($cookie-alert-position == 'bottom') {
+        top: auto;
+        bottom: 0;
+        transform: translateY(100%);
+    }
 
     .cookie-alert-is-active & {
         transform: translateY(0);
-        opacity: 1;
-        transition: opacity 0.4s ease, transform 0s 0s;
+        transition: transform $cookie-alert-transition-in-time ease-out;
     }
 }
 
 .cookie-alert__content {
     position: relative;
-    align-self: center;
-    max-width: 600px;
+    width: 100%;
+    max-width: $cookie-alert-max-container-width;
     padding: 2rem;
-    margin: 1rem;
-    transform: translateY(-100vh);
-    background-color: $cookie-alert-bg-color;
-    opacity: 0;
-    transition: opacity 0s 0.4s, transform 0.4s ease;
-
-    .cookie-alert-is-active & {
-        transform: translateY(0);
-        opacity: 1;
-        transition: opacity 0.2s 0.2s, transform 0.4s ease;
-    }
 }
 
 .cookie-alert__header {

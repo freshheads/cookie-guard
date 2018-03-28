@@ -21,6 +21,7 @@ class FHCookieGuard {
             activeClass: 'cookie-alert-is-active',
             excludedPageUrls: {},
             callbacks: {
+                onOpenCookieAlert: null,
                 onCloseCookieAlert: null
             }
         };
@@ -81,10 +82,16 @@ class FHCookieGuard {
      * @private
      */
     _openCookieAlert() {
+        var { callbacks } = this.options;
+
         this._parentContainer.classList.add(this.options.activeClass);
         this.cookieAlert.setAttribute('aria-hidden', 'false');
 
         this._acceptButton.focus();
+
+        if (typeof callbacks.onOpenCookieAlert === 'function') {
+            callbacks.onOpenCookieAlert(this.cookieAlert);
+        }
     }
 
     /**
@@ -97,7 +104,7 @@ class FHCookieGuard {
         this.cookieAlert.setAttribute('aria-hidden', 'true');
 
         if (typeof callbacks.onCloseCookieAlert === 'function') {
-            callbacks.onCloseCookieAlert();
+            callbacks.onCloseCookieAlert(this.cookieAlert);
         }
     }
 
