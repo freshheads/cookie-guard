@@ -16,6 +16,7 @@ The library has the following options that can be set as the second parameter wh
     activeClass: 'cookie-alert-is-active',
     excludedPageUrls: {}, // array with urls where cookie should not be shown (relative paths)
     callbacks: {
+        onOpenCookieAlert: null, // add function that will be triggered after alert opens
         onCloseCookieAlert: null // add function that will be triggered after closeAlert
     }
 };
