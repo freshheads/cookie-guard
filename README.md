@@ -23,6 +23,6 @@ This library supports the latest 2 versions of all modern browsers. But support 
 - IE11+ support by adding Object.assign polyfill
 - IE10+ support by adding element.dataset polyfill 
 
-## Todo
+## Roadmap
 
-* Add notification styling component
+* Add cookie groups that can be accepted or refused, eg. Functional / Analitic / Advertorial / Social cookies
