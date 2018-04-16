@@ -1,4 +1,5 @@
 import Cookie from 'js-cookie';
+import merge from 'deepmerge';
 
 class FHCookieGuard {
     constructor(selector = '.js-cookie-alert', options = {}) {
@@ -26,7 +27,7 @@ class FHCookieGuard {
             }
         };
 
-        this.options = Object.assign(this.options, options, this.cookieAlert.dataset);
+        this.options = merge.all([this.options, options, this.cookieAlert.dataset]);
 
         this._onAcceptCookiesClick = this._onAcceptCookiesClick.bind(this);
         this._onRefuseCookiesClick = this._onRefuseCookiesClick.bind(this);
