@@ -20,7 +20,7 @@ class FHCookieGuard {
             expireDays: 90,
             path: '/',
             activeClass: 'cookie-alert-is-active',
-            excludedPageUrls: {},
+            excludedPageUrls: [],
             callbacks: {
                 onOpenCookieAlert: null,
                 onCloseCookieAlert: null
@@ -114,7 +114,11 @@ class FHCookieGuard {
      * @private
      */
     _isCurrentPageExcluded() {
-        var excludedPageUrls = JSON.parse(this.cookieAlert.dataset.excludedPageUrls);
+        var excludedPageUrls = this.options.excludedPageUrls;
+
+        if (Array.isArray(this.options.excludedPageUrls) === false ) {
+            excludedPageUrls = JSON.parse(excludedPageUrls);
+        }
 
         return excludedPageUrls.indexOf(window.location.pathname) >= 0;
     }

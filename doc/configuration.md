@@ -14,7 +14,7 @@ The library has the following options that can be set as the second parameter wh
     expireDays: 90,
     path: '/',
     activeClass: 'cookie-alert-is-active',
-    excludedPageUrls: {}, // array with urls where cookie should not be shown (relative paths)
+    excludedPageUrls: [], // array with urls where cookie should not be shown (relative paths), this can also be a JSON encoded string
     callbacks: {
         onOpenCookieAlert: null, // add function that will be triggered after alert opens
         onCloseCookieAlert: null // add function that will be triggered after closeAlert
