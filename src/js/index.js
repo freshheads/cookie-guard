@@ -4,15 +4,11 @@ import merge from 'deepmerge';
 class FHCookieGuard {
     constructor(selector = '.js-cookie-alert', options = {}) {
         this.cookieAlert = document.querySelector(selector);
-
-        if (this.cookieAlert === null) {
-            return;
-        }
-
-        this.options = {
+        this.options = merge.all([{
             selectors: {
                 accept: '.js-cookie-alert-accept',
                 refuse: '.js-cookie-alert-refuse',
+                revoke: '.js-cookie-alert-revoke',
                 cookieGuard: '.js-cookie-guarded',
                 parentContainer: 'body'
             },
@@ -23,15 +19,20 @@ class FHCookieGuard {
             excludedPageUrls: [],
             callbacks: {
                 onOpenCookieAlert: null,
-                onCloseCookieAlert: null
+                onCloseCookieAlert: null,
+                onRevoke: null
             }
-        };
+        }, options, this.cookieAlert ? this.cookieAlert.dataset : {}]);
 
-        this.options = merge.all([this.options, options, this.cookieAlert.dataset]);
+        this._onRevokeCookiesClick = this._onRevokeCookiesClick.bind(this);
+        this.initRevoke();
+
+        if (this.cookieAlert === null) {
+            return;
+        }
 
         this._onAcceptCookiesClick = this._onAcceptCookiesClick.bind(this);
         this._onRefuseCookiesClick = this._onRefuseCookiesClick.bind(this);
-
         this.init();
     }
 
@@ -39,21 +40,39 @@ class FHCookieGuard {
      * @public
      */
     init() {
-        var { cookieName } = this.options;
+        var { cookieName, selectors } = this.options;
 
         if (typeof Cookie.get(cookieName) !== 'undefined' || this._isCurrentPageExcluded()) {
             this.cookieAlert.parentElement.removeChild(this.cookieAlert);
             return;
         }
 
-        this._parentContainer = document.querySelector(this.options.selectors.parentContainer);
-        this._acceptButton = document.querySelector(this.options.selectors.accept);
-        this._refuseButton = document.querySelector(this.options.selectors.refuse);
+        this._parentContainer = document.querySelector(selectors.parentContainer);
+        this._acceptButton = document.querySelector(selectors.accept);
+        this._refuseButton = document.querySelector(selectors.refuse);
 
         this._acceptButton.addEventListener('click', this._onAcceptCookiesClick);
         this._refuseButton.addEventListener('click', this._onRefuseCookiesClick);
 
         this._openCookieAlert();
+    }
+
+    /**
+     * @public
+     */
+    initRevoke() {
+        var { cookieName, selectors } = this.options;
+
+        this._revokeElements = document.querySelectorAll(selectors.revoke);
+
+        if (!Cookie.get(cookieName)) {
+            this._removeRevokeElements();
+            return;
+        }
+
+        Array.prototype.forEach.call(this._revokeElements, (element) => {
+            element.addEventListener('click', this._onRevokeCookiesClick);
+        });
     }
 
     /**
@@ -82,10 +101,24 @@ class FHCookieGuard {
     /**
      * @private
      */
-    _openCookieAlert() {
-        var { callbacks } = this.options;
+    _onRevokeCookiesClick() {
+        var { cookieName, path, callbacks } = this.options;
 
-        this._parentContainer.classList.add(this.options.activeClass);
+        Cookie.remove(cookieName, { path: path });
+        this._removeRevokeElements();
+
+        if (typeof callbacks.onRevoke === 'function') {
+            callbacks.onRevoke();
+        }
+    }
+
+    /**
+     * @private
+     */
+    _openCookieAlert() {
+        var { callbacks, activeClass } = this.options;
+
+        this._parentContainer.classList.add(activeClass);
         this.cookieAlert.setAttribute('aria-hidden', 'false');
 
         this._acceptButton.focus();
@@ -114,9 +147,9 @@ class FHCookieGuard {
      * @private
      */
     _isCurrentPageExcluded() {
-        var excludedPageUrls = this.options.excludedPageUrls;
+        var { excludedPageUrls } = this.options;
 
-        if (Array.isArray(this.options.excludedPageUrls) === false ) {
+        if (Array.isArray(excludedPageUrls) === false ) {
             excludedPageUrls = JSON.parse(excludedPageUrls);
         }
 
@@ -127,32 +160,41 @@ class FHCookieGuard {
      * @private
      */
     _enableCookieGuardedContent() {
-        var cookieGuardedElements = document.querySelectorAll(this.options.selectors.cookieGuard);
+        var { selectors } = this.options;
+
+        var cookieGuardedElements = document.querySelectorAll(selectors.cookieGuard);
         var parser = new DOMParser();
 
         if (!cookieGuardedElements.length) {
             return;
-
         }
 
-        Array.prototype.forEach.call(cookieGuardedElements, function(element) {
-
-            // get script from content attribute
+        Array.prototype.forEach.call(cookieGuardedElements, (element) => {
+            // Get script from content attribute
             let content = parser.parseFromString(element.dataset.content, 'text/html');
             let guardedScript = content.querySelector('script');
 
-            // create a new script element so DOM can execute
+            // Create a new script element so DOM can execute
             let newScriptElement = document.createElement('script');
 
-            // check if the new script tag has a external src
+            // Check if the new script tag has a external src
             if (guardedScript.src) {
                 newScriptElement.src = guardedScript.src;
             } else {
                 newScriptElement.innerHTML = guardedScript.innerHTML;
             }
 
-            // replace the meta tag with the new script element
+            // Replace the meta tag with the new script element
             element.parentNode.replaceChild(newScriptElement, element);
+        });
+    }
+
+    /**
+     * @private
+     */
+    _removeRevokeElements() {
+        Array.prototype.forEach.call(this._revokeElements, (element) => {
+            element.parentNode.removeChild(element);
         });
     }
 }
