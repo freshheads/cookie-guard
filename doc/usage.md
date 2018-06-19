@@ -67,4 +67,15 @@ You can use one of the predefined styles or create your own.
 @import "~@freshheads/cookie-guard/src/scss/notification";
 ```
 
+6. Handle cookie revocation
 
+The cookie set by `cookie-guard` can be revoked by clicking on an element with the class provided in the `selectors.revoke` option. Clicking an element with this class will remove the cookie and essentially reset the setup. It's advised to reload the page when a user revokes the cookies, which can be done using the `onRevoke` callback.
+
+```js
+{
+    // ...
+    onRevoke: () => {
+        window.location.reload();
+    }
+}
+```
