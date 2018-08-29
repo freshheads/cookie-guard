@@ -14,6 +14,7 @@ class FHCookieGuard {
             },
             cookieName: 'cookies-accepted',
             expireDays: 90,
+            domain: window.location.hostname,
             path: '/',
             activeClass: 'cookie-alert-is-active',
             excludedPageUrls: [],
@@ -79,10 +80,7 @@ class FHCookieGuard {
      * @private
      */
     _onAcceptCookiesClick() {
-        var { cookieName, expireDays, path } = this.options;
-
-        Cookie.set(cookieName, 1, { expires: parseInt(expireDays), path: path });
-
+        this._setCookie(1);
         this._enableCookieGuardedContent();
         this._closeCookieAlert();
     }
@@ -91,12 +89,24 @@ class FHCookieGuard {
      * @private
      */
     _onRefuseCookiesClick() {
-        var { cookieName, expireDays, path } = this.options;
-
-        Cookie.set(cookieName, 0, { expires: parseInt(expireDays), path: path });
-
+        this._setCookie(0);
         this._closeCookieAlert();
     }
+
+    /**
+     * @private
+     * @param {string} value
+     */
+    _setCookie(value) {
+        var { cookieName, expireDays, domain, path } = this.options;
+
+        Cookie.set(cookieName, value, {
+            expires: parseInt(expireDays),
+            domain: domain,
+            path: path
+        });
+    }
+
 
     /**
      * @private
