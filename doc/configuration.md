@@ -14,6 +14,7 @@ The library has the following options that can be set as the second parameter wh
     cookieName: 'cookies-accepted',
     expireDays: 90,
     path: '/',
+    domain: window.location.hostname,
     activeClass: 'cookie-alert-is-active',
     excludedPageUrls: [], // array with urls where cookie should not be shown (relative paths), this can also be a JSON encoded string
     callbacks: {
