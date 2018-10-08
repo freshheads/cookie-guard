@@ -52,8 +52,13 @@ class FHCookieGuard {
         this._acceptButton = document.querySelector(selectors.accept);
         this._refuseButton = document.querySelector(selectors.refuse);
 
-        this._acceptButton.addEventListener('click', this._onAcceptCookiesClick);
-        this._refuseButton.addEventListener('click', this._onRefuseCookiesClick);
+        if (this._acceptButton) {
+            this._acceptButton.addEventListener('click', this._onAcceptCookiesClick);
+        }
+
+        if (this._refuseButton) {
+            this._refuseButton.addEventListener('click', this._onRefuseCookiesClick);
+        }
 
         this._openCookieAlert();
     }
@@ -131,7 +136,9 @@ class FHCookieGuard {
         this._parentContainer.classList.add(activeClass);
         this.cookieAlert.setAttribute('aria-hidden', 'false');
 
-        this._acceptButton.focus();
+        if (this._acceptButton) {
+            this._acceptButton.focus();
+        }
 
         if (typeof callbacks.onOpenCookieAlert === 'function') {
             callbacks.onOpenCookieAlert(this.cookieAlert);
