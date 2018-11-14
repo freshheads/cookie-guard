@@ -117,9 +117,9 @@ class FHCookieGuard {
      * @private
      */
     _onRevokeCookiesClick() {
-        var { cookieName, path, callbacks } = this.options;
+        var { cookieName, domain, path, callbacks } = this.options;
 
-        Cookie.remove(cookieName, { path: path });
+        Cookie.remove(cookieName, { domain, path });
         this._removeRevokeElements();
 
         if (typeof callbacks.onRevoke === 'function') {
