@@ -4,10 +4,11 @@ $cookie-alert-max-container-width: 1260px !default;
 $cookie-alert-position: 'top' !default;
 $cookie-alert-transition-in-time: 0.25s !default; // set 0s to disable
 $cookie-alert-transition-out-time: 0.25s !default; // set 0s to disable
+$cookie-alert-zindex: 99999 !default;
 
 .cookie-alert {
     position: fixed;
-    z-index: 99999;
+    z-index: $cookie-alert-zindex;
     top: 0;
     left: 0;
     display: flex;
