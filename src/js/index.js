@@ -67,14 +67,9 @@ class FHCookieGuard {
      * @public
      */
     initRevoke() {
-        var { cookieName, selectors } = this.options;
+        var { selectors } = this.options;
 
         this._revokeElements = document.querySelectorAll(selectors.revoke);
-
-        if (!Cookie.get(cookieName)) {
-            this._removeRevokeElements();
-            return;
-        }
 
         Array.prototype.forEach.call(this._revokeElements, (element) => {
             element.addEventListener('click', this._onRevokeCookiesClick);
@@ -107,23 +102,25 @@ class FHCookieGuard {
 
         Cookie.set(cookieName, value, {
             expires: parseInt(expireDays),
-            domain: domain,
-            path: path
+            domain,
+            path
         });
     }
 
 
     /**
+     * @param {Event} event
      * @private
      */
-    _onRevokeCookiesClick() {
+    _onRevokeCookiesClick(event) {
+        event.preventDefault();
+
         var { cookieName, domain, path, callbacks } = this.options;
 
         Cookie.remove(cookieName, { domain, path });
-        this._removeRevokeElements();
 
         if (typeof callbacks.onRevoke === 'function') {
-            callbacks.onRevoke();
+            callbacks.onRevoke(event.target);
         }
     }
 
@@ -203,15 +200,6 @@ class FHCookieGuard {
 
             // Replace the meta tag with the new script element
             element.parentNode.replaceChild(newScriptElement, element);
-        });
-    }
-
-    /**
-     * @private
-     */
-    _removeRevokeElements() {
-        Array.prototype.forEach.call(this._revokeElements, (element) => {
-            element.parentNode.removeChild(element);
         });
     }
 }
