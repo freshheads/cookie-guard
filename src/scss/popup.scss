@@ -11,7 +11,8 @@ $cookie-alert-zindex: 99999 !default;
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    overflow-y: auto;
     transform: translateY(-100%);
     background-color: $cookie-alert-overlay-color;
     opacity: 0;
@@ -25,7 +26,9 @@ $cookie-alert-zindex: 99999 !default;
 }
 
 .cookie-alert__content {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     align-self: center;
     max-width: 600px;
     padding: 2rem;
@@ -34,6 +37,10 @@ $cookie-alert-zindex: 99999 !default;
     background-color: $cookie-alert-bg-color;
     opacity: 0;
     transition: opacity 0s 0.4s, transform 0.4s ease;
+    
+    @media screen and (min-width: 600px) {
+        position: relative;
+    }
 
     .cookie-alert-is-active & {
         transform: translateY(0);
