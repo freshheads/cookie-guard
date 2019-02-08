@@ -188,6 +188,10 @@ class FHCookieGuard {
             let content = parser.parseFromString(element.dataset.content, 'text/html');
             let guardedScript = content.querySelector('script');
 
+            if (!guardedScript) {
+                return;
+            }
+
             // Create a new script element so DOM can execute
             let newScriptElement = document.createElement('script');
 
