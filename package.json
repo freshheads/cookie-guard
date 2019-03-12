@@ -1,60 +1,60 @@
 {
-  "name": "@freshheads/cookie-guard",
-  "version": "2.0.2",
-  "description": "Let user manage cookie usage",
-  "main": "lib/FHCookieGuard.js",
-  "files": [
-    "lib",
-    "src"
-  ],
-  "scripts": {
-    "build": "webpack --mode=production",
-    "prepublish": "npm run build",
-    "dev": "webpack --watch --mode=development"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/freshheads/cookie-guard.git"
-  },
-  "engines": {
-    "node": ">= 6.9.0 || >= 8.9.0"
-  },
-  "author": "Freshheads",
-  "contributors": [
-    {
-      "name": "Martin Broos",
-      "email": "martin.broos@freshheads.com"
+    "name": "@freshheads/cookie-guard",
+    "version": "2.0.2",
+    "description": "Let user manage cookie usage",
+    "main": "lib/FHCookieGuard.js",
+    "files": [
+        "lib",
+        "src"
+    ],
+    "scripts": {
+        "build": "webpack --mode=production",
+        "prepublish": "npm run build",
+        "dev": "webpack --watch --mode=development"
     },
-    {
-      "name": "Remco Abalain",
-      "email": "remco.abalain@freshheads.com"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/freshheads/cookie-guard.git"
     },
-    {
-      "name": "Geert van de Langenberg",
-      "email": "geert.van.de.langenberg@freshheads.com"
+    "engines": {
+        "node": ">= 6.9.0 || >= 8.9.0"
+    },
+    "author": "Freshheads",
+    "contributors": [
+        {
+            "name": "Martin Broos",
+            "email": "martin.broos@freshheads.com"
+        },
+        {
+            "name": "Remco Abalain",
+            "email": "remco.abalain@freshheads.com"
+        },
+        {
+            "name": "Geert van de Langenberg",
+            "email": "geert.van.de.langenberg@freshheads.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/freshheads/cookie-guard/issues"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.2.3",
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "babel-loader": "^8.0.5",
+        "eslint": "^5.15.1",
+        "eslint-loader": "^2.1.2",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.2.3"
+    },
+    "dependencies": {
+        "deepmerge": "^3.2.0",
+        "js-cookie": "^2.2.0"
+    },
+    "homepage": "https://github.com/freshheads/cookie-guard#readme",
+    "directories": {
+        "doc": "doc",
+        "lib": "lib"
     }
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/freshheads/cookie-guard/issues"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.0",
-    "eslint-loader": "^2.0.0",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
-  },
-  "dependencies": {
-    "deepmerge": "^2.1.0",
-    "js-cookie": "^2.2.0"
-  },
-  "homepage": "https://github.com/freshheads/cookie-guard#readme",
-  "directories": {
-    "doc": "doc",
-    "lib": "lib"
-  }
 }
