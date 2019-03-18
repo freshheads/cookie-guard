@@ -18,13 +18,12 @@ const config = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['env', {
-                                    'targets': {
-                                        'browsers': ['last 2 versions', 'ie >= 11']
-                                    },
-                                    'modules': false
-                                }
-                            ]
+                            ['@babel/preset-env', {
+                                'targets': {
+                                    'browsers': ['last 2 versions', 'ie >= 11']
+                                },
+                                'modules': false
+                            }]
                         ]
                     }
                 }]
