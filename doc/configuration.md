@@ -12,8 +12,8 @@ The library has the following options that can be set as the second parameter wh
         parentContainer: 'body'
     },
     cookieName: 'cookies-accepted',
-    autoAcceptCookieConsentAfterRefreshCount: null,
-    autoAcceptCookieConsentName: 'cookies-refresh-count',
+    autoAcceptCookieConsentAfterRequestCount: null,
+    autoAcceptCookieConsentName: 'current-request-count',
     expireDays: 90,
     path: '/',
     domain: window.location.hostname,

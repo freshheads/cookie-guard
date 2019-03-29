@@ -14,7 +14,7 @@ class FHCookieGuard {
             },
             cookieName: 'cookies-accepted',
             autoAcceptCookieConsentAfterRequestCount: null,
-            autoAcceptCookieConsentName: 'cookies-refresh-count',
+            autoAcceptCookieConsentName: 'current-request-count',
             expireDays: 90,
             domain: window.location.hostname,
             path: '/',
@@ -26,7 +26,7 @@ class FHCookieGuard {
                 onRevoke: null
             }
         }, options, this.cookieAlert ? this.cookieAlert.dataset : {}]);
-        this._currentRequestCount = Cookie.get(this.options.autoAcceptCookieConsentName);
+        this._currentRequestCount = parseInt(Cookie.get(this.options.autoAcceptCookieConsentName)) || 0;
 
         this._onRevokeCookiesClick = this._onRevokeCookiesClick.bind(this);
         this.initRevoke();
@@ -49,8 +49,6 @@ class FHCookieGuard {
             return;
         }
 
-        this._initAutoAcceptCookieConsent();
-
         this._parentContainer = document.querySelector(selectors.parentContainer);
         this._acceptButton = document.querySelector(selectors.accept);
         this._refuseButton = document.querySelector(selectors.refuse);
@@ -64,6 +62,7 @@ class FHCookieGuard {
         }
 
         this._openCookieAlert();
+        this._autoAcceptCookieConsentIfNeeded();
     }
 
     initRevoke() {
@@ -77,33 +76,25 @@ class FHCookieGuard {
     }
 
     _onAcceptCookiesClick() {
-        this._setCookieConsentValue(this.options.cookieName, 1);
+        this._setCookieConsentValue(1);
         this._enableCookieGuardedContent();
         this._closeCookieAlert();
     }
 
     _onRefuseCookiesClick() {
-        this._setCookieConsentValue(this.options.cookieName, 0);
+        this._setCookieConsentValue(0);
         this._closeCookieAlert();
     }
 
-    _initAutoAcceptCookieConsent() {
-        if (this._isCurrentPageExcluded() || !this.options.autoAcceptCookieConsentAfterRequestCount) {
-            return;
-        }
-
+    _autoAcceptCookieConsentIfNeeded() {
         var { autoAcceptCookieConsentAfterRequestCount } = this.options;
 
-        if (!this._currentRequestCount) {
-            this._setRequestCounterSessionCookie(1);
-
+        if (this._isCurrentPageExcluded() || !autoAcceptCookieConsentAfterRequestCount) {
             return;
         }
 
-        var currentRefreshCount = parseInt(this._currentRequestCount);
-
-        if (currentRefreshCount < autoAcceptCookieConsentAfterRequestCount) {
-            this._setRequestCounterSessionCookie(currentRefreshCount + 1);
+        if (this._currentRequestCount < autoAcceptCookieConsentAfterRequestCount) {
+            this._setRequestCounterSessionCookie(this._currentRequestCount + 1);
 
             return;
         }
