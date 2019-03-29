@@ -13,6 +13,8 @@ class FHCookieGuard {
                 parentContainer: 'body'
             },
             cookieName: 'cookies-accepted',
+            autoAcceptCookieConsentAfterRequestCount: null,
+            autoAcceptCookieConsentName: 'current-request-count',
             expireDays: 90,
             domain: window.location.hostname,
             path: '/',
@@ -24,6 +26,7 @@ class FHCookieGuard {
                 onRevoke: null
             }
         }, options, this.cookieAlert ? this.cookieAlert.dataset : {}]);
+        this._currentRequestCount = parseInt(Cookie.get(this.options.autoAcceptCookieConsentName)) || 0;
 
         this._onRevokeCookiesClick = this._onRevokeCookiesClick.bind(this);
         this.initRevoke();
@@ -37,14 +40,12 @@ class FHCookieGuard {
         this.init();
     }
 
-    /**
-     * @public
-     */
     init() {
         var { cookieName, selectors } = this.options;
 
         if (typeof Cookie.get(cookieName) !== 'undefined' || this._isCurrentPageExcluded()) {
             this.cookieAlert.parentElement.removeChild(this.cookieAlert);
+
             return;
         }
 
@@ -61,11 +62,9 @@ class FHCookieGuard {
         }
 
         this._openCookieAlert();
+        this._autoAcceptCookieConsentIfNeeded();
     }
 
-    /**
-     * @public
-     */
     initRevoke() {
         var { selectors } = this.options;
 
@@ -76,29 +75,50 @@ class FHCookieGuard {
         });
     }
 
-    /**
-     * @private
-     */
     _onAcceptCookiesClick() {
-        this._setCookie(1);
+        this._setCookieConsentValue(1);
         this._enableCookieGuardedContent();
         this._closeCookieAlert();
     }
 
-    /**
-     * @private
-     */
     _onRefuseCookiesClick() {
-        this._setCookie(0);
+        this._setCookieConsentValue(0);
         this._closeCookieAlert();
     }
 
+    _autoAcceptCookieConsentIfNeeded() {
+        var { autoAcceptCookieConsentAfterRequestCount } = this.options;
+
+        if (this._isCurrentPageExcluded() || !autoAcceptCookieConsentAfterRequestCount) {
+            return;
+        }
+
+        if (this._currentRequestCount < autoAcceptCookieConsentAfterRequestCount) {
+            this._setRequestCounterSessionCookie(this._currentRequestCount + 1);
+
+            return;
+        }
+
+        this._onAcceptCookiesClick();
+    }
+
     /**
-     * @private
+     * @param {number} value
+     */
+    _setRequestCounterSessionCookie(value) {
+        var { domain, path, autoAcceptCookieConsentName } = this.options;
+
+        Cookie.set(autoAcceptCookieConsentName, value, {
+            domain,
+            path
+        });
+    }
+
+    /**
      * @param {string} value
      */
-    _setCookie(value) {
-        var { cookieName, expireDays, domain, path } = this.options;
+    _setCookieConsentValue(value) {
+        var { expireDays, domain, path, cookieName } = this.options;
 
         Cookie.set(cookieName, value, {
             expires: parseInt(expireDays),
@@ -107,10 +127,8 @@ class FHCookieGuard {
         });
     }
 
-
     /**
      * @param {Event} event
-     * @private
      */
     _onRevokeCookiesClick(event) {
         event.preventDefault();
@@ -124,9 +142,6 @@ class FHCookieGuard {
         }
     }
 
-    /**
-     * @private
-     */
     _openCookieAlert() {
         var { callbacks, activeClass } = this.options;
 
@@ -142,9 +157,6 @@ class FHCookieGuard {
         }
     }
 
-    /**
-     * @private
-     */
     _closeCookieAlert() {
         var { activeClass, callbacks } = this.options;
 
@@ -158,7 +170,6 @@ class FHCookieGuard {
 
     /**
      * @return {boolean}
-     * @private
      */
     _isCurrentPageExcluded() {
         var { excludedPageUrls } = this.options;
@@ -170,9 +181,6 @@ class FHCookieGuard {
         return excludedPageUrls.indexOf(window.location.pathname) >= 0;
     }
 
-    /**
-     * @private
-     */
     _enableCookieGuardedContent() {
         var { selectors } = this.options;
 
