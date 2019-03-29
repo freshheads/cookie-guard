@@ -81,3 +81,7 @@ The cookie set by `cookie-guard` can be revoked by clicking on an element with t
     }
 }
 ```
+
+## 7. Automatically accept cookies after x requests
+
+When option `autoAcceptCookieConsentAfterRequestCount` is set, cookies will be accepted automatically after x requests.  

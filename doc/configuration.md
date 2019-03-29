@@ -12,7 +12,7 @@ The library has the following options that can be set as the second parameter wh
         parentContainer: 'body'
     },
     cookieName: 'cookies-accepted',
-    autoAcceptCookieConsentAfterRefreshCount: null, // after this number cookieName will be set automatically
+    autoAcceptCookieConsentAfterRefreshCount: null,
     autoAcceptCookieConsentName: 'cookies-refresh-count',
     expireDays: 90,
     path: '/',
