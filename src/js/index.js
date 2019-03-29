@@ -13,6 +13,8 @@ class FHCookieGuard {
                 parentContainer: 'body'
             },
             cookieName: 'cookies-accepted',
+            autoAcceptCookieConsentAfterRefreshCount: null,
+            autoAcceptCookieConsentName: 'cookies-refresh-count',
             expireDays: 90,
             domain: window.location.hostname,
             path: '/',
@@ -35,11 +37,9 @@ class FHCookieGuard {
         this._onAcceptCookiesClick = this._onAcceptCookiesClick.bind(this);
         this._onRefuseCookiesClick = this._onRefuseCookiesClick.bind(this);
         this.init();
+        this._initAutoAcceptCookieConsent();
     }
 
-    /**
-     * @public
-     */
     init() {
         var { cookieName, selectors } = this.options;
 
@@ -63,9 +63,6 @@ class FHCookieGuard {
         this._openCookieAlert();
     }
 
-    /**
-     * @public
-     */
     initRevoke() {
         var { selectors } = this.options;
 
@@ -76,41 +73,71 @@ class FHCookieGuard {
         });
     }
 
-    /**
-     * @private
-     */
     _onAcceptCookiesClick() {
-        this._setCookie(1);
+        this._setCookie(this.options.cookieName, 1);
         this._enableCookieGuardedContent();
         this._closeCookieAlert();
     }
 
-    /**
-     * @private
-     */
     _onRefuseCookiesClick() {
-        this._setCookie(0);
+        this._setCookie(this.options.cookieName, 0);
         this._closeCookieAlert();
     }
 
+    _initAutoAcceptCookieConsent() {
+        if (this._isCurrentPageExcluded() || !this.options.autoAcceptCookieConsentAfterRefreshCount) {
+            return;
+        }
+
+        var { autoAcceptCookieConsentAfterRefreshCount, autoAcceptCookieConsentName } = this.options;
+        var refreshCountCookie = Cookie.get(autoAcceptCookieConsentName);
+
+        if (!refreshCountCookie) {
+            this._setAutoAcceptCookieConsent(1);
+
+            return;
+        }
+
+        var refreshCount = parseInt(refreshCountCookie);
+
+        if (refreshCount < autoAcceptCookieConsentAfterRefreshCount) {
+            this._setAutoAcceptCookieConsent(refreshCount + 1);
+
+            return;
+        }
+
+
+        this._onAcceptCookiesClick();
+    }
+
     /**
-     * @private
+     * @param {number} value
+     */
+    _setAutoAcceptCookieConsent(value) {
+        var { domain, path, autoAcceptCookieConsentName } = this.options;
+
+        Cookie.set(autoAcceptCookieConsentName, value, {
+            domain,
+            path
+        });
+    }
+
+    /**
+     * @param {string} key
      * @param {string} value
      */
-    _setCookie(value) {
-        var { cookieName, expireDays, domain, path } = this.options;
+    _setCookie(key, value) {
+        var { expireDays, domain, path } = this.options;
 
-        Cookie.set(cookieName, value, {
+        Cookie.set(key, value, {
             expires: parseInt(expireDays),
             domain,
             path
         });
     }
 
-
     /**
      * @param {Event} event
-     * @private
      */
     _onRevokeCookiesClick(event) {
         event.preventDefault();
@@ -124,9 +151,6 @@ class FHCookieGuard {
         }
     }
 
-    /**
-     * @private
-     */
     _openCookieAlert() {
         var { callbacks, activeClass } = this.options;
 
@@ -142,9 +166,6 @@ class FHCookieGuard {
         }
     }
 
-    /**
-     * @private
-     */
     _closeCookieAlert() {
         var { activeClass, callbacks } = this.options;
 
@@ -158,7 +179,6 @@ class FHCookieGuard {
 
     /**
      * @return {boolean}
-     * @private
      */
     _isCurrentPageExcluded() {
         var { excludedPageUrls } = this.options;
@@ -170,9 +190,6 @@ class FHCookieGuard {
         return excludedPageUrls.indexOf(window.location.pathname) >= 0;
     }
 
-    /**
-     * @private
-     */
     _enableCookieGuardedContent() {
         var { selectors } = this.options;
 
