@@ -1,10 +1,15 @@
-import Cookie from 'js-cookie';
 import merge from 'deepmerge';
+import CookieConsentStore from './CookieConsentStore';
+import CookieConsentNotification from './CookieConsentNotification';
+import AutoAcceptRequestWatcher from './AutoAcceptRequestWatcher';
+import { isCurrentPageExcluded } from './helpers';
 
 class FHCookieGuard {
-    constructor(selector = '.js-cookie-alert', options = {}) {
-        this.cookieAlert = document.querySelector(selector);
-        this.options = merge.all([{
+    constructor(notificationElementSelector = '.js-cookie-alert', options = {}) {
+
+        this.cookieConsentNotificationElement = document.querySelector(notificationElementSelector);
+
+        const defaultOptions = {
             selectors: {
                 accept: '.js-cookie-alert-accept',
                 refuse: '.js-cookie-alert-refuse',
@@ -25,47 +30,76 @@ class FHCookieGuard {
                 onCloseCookieAlert: null,
                 onRevoke: null
             }
-        }, options, this.cookieAlert ? this.cookieAlert.dataset : {}]);
-        this._currentRequestCount = parseInt(Cookie.get(this.options.autoAcceptCookieConsentName)) || 0;
+        };
+
+        // merge default options with user options coming from initialisation and data attributes on notification element
+        this.options = merge.all([defaultOptions, options, this.cookieConsentNotificationElement ? this.cookieConsentNotificationElement.dataset : {}]);
 
         this._onRevokeCookiesClick = this._onRevokeCookiesClick.bind(this);
-        this.initRevoke();
 
-        if (this.cookieAlert === null) {
-            return;
-        }
+        this.cookieConsentStore = new CookieConsentStore(
+            this.options.cookieName,
+            this.options.expireDays,
+            this.options.domain,
+            this.options.path
+        );
 
-        this._onAcceptCookiesClick = this._onAcceptCookiesClick.bind(this);
-        this._onRefuseCookiesClick = this._onRefuseCookiesClick.bind(this);
         this.init();
     }
 
     init() {
-        var { cookieName, selectors } = this.options;
+        this._initCookieConsentNotificationIfNeeded();
+        this._initAutoAcceptCookieConsentIfNeeded();
+        this._initRevoke();
 
-        if (typeof Cookie.get(cookieName) !== 'undefined' || this._isCurrentPageExcluded()) {
-            this.cookieAlert.parentElement.removeChild(this.cookieAlert);
+        // @todo add event listeners to accept or refuse cookies without notification, usefull for settings block
+    }
 
+    _initCookieConsentNotificationIfNeeded() {
+        // @todo make it more clear that excluxedPages is only for the notification and request watcher
+        if (!this.cookieConsentNotificationElement || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
         }
 
-        this._parentContainer = document.querySelector(selectors.parentContainer);
-        this._acceptButton = document.querySelector(selectors.accept);
-        this._refuseButton = document.querySelector(selectors.refuse);
+        this.cookieConsentNotification = new CookieConsentNotification(
+            this.cookieConsentNotificationElement,
+            this.cookieConsentStore,
+            this.options,
+            this.enableCookieGuardedContent
+        );
 
-        if (this._acceptButton) {
-            this._acceptButton.addEventListener('click', this._onAcceptCookiesClick);
-        }
-
-        if (this._refuseButton) {
-            this._refuseButton.addEventListener('click', this._onRefuseCookiesClick);
-        }
-
-        this._openCookieAlert();
-        this._autoAcceptCookieConsentIfNeeded();
+        this.cookieConsentNotification.show();
     }
 
-    initRevoke() {
+    _initAutoAcceptCookieConsentIfNeeded() {
+        // @todo make a separate settings key for auto accept watcher
+        const { autoAcceptCookieConsentAfterRequestCount, autoAcceptCookieConsentName, domain, path } = this.options;
+
+        if (this.autoAcceptCookieConsentAfterRequestCount === 0 || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
+            return;
+        }
+
+        const autoAcceptSettings = {
+            name: autoAcceptCookieConsentName,
+            domain: domain,
+            path: path
+        };
+
+        new AutoAcceptRequestWatcher(
+            this.cookieConsentStore,
+            autoAcceptCookieConsentAfterRequestCount,
+            autoAcceptSettings,
+            () => {
+                this.enableCookieGuardedContent();
+
+                if (this.cookieConsentNotification) {
+                    this.cookieConsentNotification.close();
+                }
+            }
+        );
+    }
+
+    _initRevoke() {
         var { selectors } = this.options;
 
         this._revokeElements = document.querySelectorAll(selectors.revoke);
@@ -75,113 +109,22 @@ class FHCookieGuard {
         });
     }
 
-    _onAcceptCookiesClick() {
-        this._setCookieConsentValue(1);
-        this._enableCookieGuardedContent();
-        this._closeCookieAlert();
-    }
-
-    _onRefuseCookiesClick() {
-        this._setCookieConsentValue(0);
-        this._closeCookieAlert();
-    }
-
-    _autoAcceptCookieConsentIfNeeded() {
-        var { autoAcceptCookieConsentAfterRequestCount } = this.options;
-
-        if (this._isCurrentPageExcluded() || !autoAcceptCookieConsentAfterRequestCount) {
-            return;
-        }
-
-        if (this._currentRequestCount < autoAcceptCookieConsentAfterRequestCount) {
-            this._setRequestCounterSessionCookie(this._currentRequestCount + 1);
-
-            return;
-        }
-
-        this._onAcceptCookiesClick();
-    }
-
-    /**
-     * @param {number} value
-     */
-    _setRequestCounterSessionCookie(value) {
-        var { domain, path, autoAcceptCookieConsentName } = this.options;
-
-        Cookie.set(autoAcceptCookieConsentName, value, {
-            domain,
-            path
-        });
-    }
-
-    /**
-     * @param {string} value
-     */
-    _setCookieConsentValue(value) {
-        var { expireDays, domain, path, cookieName } = this.options;
-
-        Cookie.set(cookieName, value, {
-            expires: parseInt(expireDays),
-            domain,
-            path
-        });
-    }
-
     /**
      * @param {Event} event
      */
     _onRevokeCookiesClick(event) {
         event.preventDefault();
 
-        var { cookieName, domain, path, callbacks } = this.options;
+        const { callbacks } = this.options;
 
-        Cookie.remove(cookieName, { domain, path });
+        this.cookieConsentStore.revoke();
 
         if (typeof callbacks.onRevoke === 'function') {
             callbacks.onRevoke(event.target);
         }
     }
 
-    _openCookieAlert() {
-        var { callbacks, activeClass } = this.options;
-
-        this._parentContainer.classList.add(activeClass);
-        this.cookieAlert.setAttribute('aria-hidden', 'false');
-
-        if (this._acceptButton) {
-            this._acceptButton.focus();
-        }
-
-        if (typeof callbacks.onOpenCookieAlert === 'function') {
-            callbacks.onOpenCookieAlert(this.cookieAlert);
-        }
-    }
-
-    _closeCookieAlert() {
-        var { activeClass, callbacks } = this.options;
-
-        this._parentContainer.classList.remove(activeClass);
-        this.cookieAlert.setAttribute('aria-hidden', 'true');
-
-        if (typeof callbacks.onCloseCookieAlert === 'function') {
-            callbacks.onCloseCookieAlert(this.cookieAlert);
-        }
-    }
-
-    /**
-     * @return {boolean}
-     */
-    _isCurrentPageExcluded() {
-        var { excludedPageUrls } = this.options;
-
-        if (Array.isArray(excludedPageUrls) === false ) {
-            excludedPageUrls = JSON.parse(excludedPageUrls);
-        }
-
-        return excludedPageUrls.indexOf(window.location.pathname) >= 0;
-    }
-
-    _enableCookieGuardedContent() {
+    enableCookieGuardedContent() {
         var { selectors } = this.options;
 
         var cookieGuardedElements = document.querySelectorAll(selectors.cookieGuard);
