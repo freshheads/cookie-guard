@@ -1,37 +1,42 @@
 import Cookie from 'js-cookie';
 
 class CookieConsentStore {
-    constructor(cookieName, expireDays, domain, path) {
+    private cookieName: string;
+    private expireDays: number;
+    private domain: string;
+    private path: string;
+
+    constructor(cookieName: string, expireDays: number, domain: string, path: string) {
         this.cookieName = cookieName;
-        this.expireDays = parseInt(expireDays);
+        this.expireDays = expireDays;
         this.domain = domain;
         this.path = path;
     }
 
-    accept() {
-        this._setValue(1);
+    public accept() {
+        this.setValue('1');
     }
 
-    refuse() {
-        this._setValue(0);
+    public refuse() {
+        this.setValue('0');
     }
 
-    revoke() {
+    public revoke() {
         Cookie.remove(this.cookieName, {
             domain: this.domain,
             path: this.path,
         });
     }
 
-    hasBeenSet() {
+    public hasBeenSet() {
         return typeof Cookie.get(this.cookieName) !== 'undefined';
     }
 
-    isAccepted() {
-        return Cookie.get(this.cookieName) === 1;
+    public isAccepted() {
+        return Cookie.get(this.cookieName) === '1';
     }
 
-    _setValue(value) {
+    private setValue(value: string) {
         Cookie.set(this.cookieName, value, {
             expires: this.expireDays,
             domain: this.domain,

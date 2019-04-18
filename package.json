@@ -2,15 +2,16 @@
     "name": "@freshheads/cookie-guard",
     "version": "2.1.0",
     "description": "Let user manage cookie usage",
-    "main": "lib/FHCookieGuard.js",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "files": [
-        "lib",
+        "build",
         "src"
     ],
     "scripts": {
-        "build": "webpack --mode=production",
-        "prepublish": "npm run build",
-        "dev": "webpack --watch --mode=development"
+        "build": "tsc",
+        "build:watch": "tsc --watch",
+        "prepublish": "npm run build"
     },
     "repository": {
         "type": "git",
@@ -39,14 +40,8 @@
         "url": "https://github.com/freshheads/cookie-guard/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.2.3",
-        "@babel/core": "^7.3.4",
-        "@babel/preset-env": "^7.3.4",
-        "babel-loader": "^8.0.5",
-        "eslint": "^5.15.1",
-        "eslint-loader": "^2.1.2",
-        "webpack": "^4.29.6",
-        "webpack-cli": "^3.2.3"
+        "@types/js-cookie": "^2.2.2",
+        "typescript": "^3.4.3"
     },
     "dependencies": {
         "deepmerge": "^3.2.0",
@@ -55,6 +50,6 @@
     "homepage": "https://github.com/freshheads/cookie-guard#readme",
     "directories": {
         "doc": "doc",
-        "lib": "lib"
+        "lib": "build"
     }
 }

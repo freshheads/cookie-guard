@@ -1,5 +1,5 @@
-export function isCurrentPageExcluded(excludedPageUrls) {
-    if (Array.isArray(excludedPageUrls) === false ) {
+export function isCurrentPageExcluded(excludedPageUrls: string | string[]): boolean {
+    if (typeof excludedPageUrls === 'string') {
         excludedPageUrls = JSON.parse(excludedPageUrls);
     }
 

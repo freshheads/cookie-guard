@@ -3,13 +3,18 @@ import CookieConsentStore from './CookieConsentStore';
 import CookieConsentNotification from './CookieConsentNotification';
 import AutoAcceptRequestWatcher from './AutoAcceptRequestWatcher';
 import { isCurrentPageExcluded } from './helpers';
+import { OptionsType, UserOptionsType } from './types';
 
 class FHCookieGuard {
-    constructor(notificationElementSelector = '.js-cookie-alert', options = {}) {
+    public cookieConsentNotificationElement: HTMLElement | null;
+    public cookieConsentNotification ?: CookieConsentNotification;
+    private options: OptionsType;
+    private cookieConsentStore: CookieConsentStore;
 
+    constructor(notificationElementSelector = '.js-cookie-alert', options: UserOptionsType = {}) {
         this.cookieConsentNotificationElement = document.querySelector(notificationElementSelector);
 
-        const defaultOptions = {
+        const defaultOptions: OptionsType = {
             selectors: {
                 accept: '.js-cookie-alert-accept',
                 refuse: '.js-cookie-alert-refuse',
@@ -33,9 +38,11 @@ class FHCookieGuard {
         };
 
         // merge default options with user options coming from initialisation and data attributes on notification element
-        this.options = merge.all([defaultOptions, options, this.cookieConsentNotificationElement ? this.cookieConsentNotificationElement.dataset : {}]);
-
-        this._onRevokeCookiesClick = this._onRevokeCookiesClick.bind(this);
+        this.options = merge.all<OptionsType>([
+            defaultOptions,
+            options,
+            this.cookieConsentNotificationElement ? this.cookieConsentNotificationElement.dataset : {}
+        ]);
 
         this.cookieConsentStore = new CookieConsentStore(
             this.options.cookieName,
@@ -47,15 +54,15 @@ class FHCookieGuard {
         this.init();
     }
 
-    init() {
-        this._initCookieConsentNotificationIfNeeded();
-        this._initAutoAcceptCookieConsentIfNeeded();
-        this._initRevoke();
+    public init() {
+        this.initCookieConsentNotificationIfNeeded();
+        this.initAutoAcceptCookieConsentIfNeeded();
+        this.initRevoke();
 
         // @todo add event listeners to accept or refuse cookies without notification, usefull for settings block
     }
 
-    _initCookieConsentNotificationIfNeeded() {
+    private initCookieConsentNotificationIfNeeded() {
         // @todo make it more clear that excluxedPages is only for the notification and request watcher
         if (!this.cookieConsentNotificationElement || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
@@ -68,14 +75,16 @@ class FHCookieGuard {
             this.enableCookieGuardedContent
         );
 
-        this.cookieConsentNotification.show();
+        if (this.cookieConsentNotification) {
+            this.cookieConsentNotification.show();
+        }
     }
 
-    _initAutoAcceptCookieConsentIfNeeded() {
+    private initAutoAcceptCookieConsentIfNeeded() {
         // @todo make a separate settings key for auto accept watcher
         const { autoAcceptCookieConsentAfterRequestCount, autoAcceptCookieConsentName, domain, path } = this.options;
 
-        if (this.autoAcceptCookieConsentAfterRequestCount === 0 || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
+        if (autoAcceptCookieConsentAfterRequestCount === null || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
         }
 
@@ -99,20 +108,17 @@ class FHCookieGuard {
         );
     }
 
-    _initRevoke() {
-        var { selectors } = this.options;
+    private initRevoke() {
+        const { selectors } = this.options;
 
-        this._revokeElements = document.querySelectorAll(selectors.revoke);
+        const revokeElements: NodeList = document.querySelectorAll(selectors.revoke);
 
-        Array.prototype.forEach.call(this._revokeElements, (element) => {
-            element.addEventListener('click', this._onRevokeCookiesClick);
+        Array.prototype.forEach.call(revokeElements, (element: HTMLElement) => {
+            element.addEventListener('click', this.onRevokeCookiesClick);
         });
     }
 
-    /**
-     * @param {Event} event
-     */
-    _onRevokeCookiesClick(event) {
+    private onRevokeCookiesClick = (event: Event) => {
         event.preventDefault();
 
         const { callbacks } = this.options;
@@ -124,17 +130,22 @@ class FHCookieGuard {
         }
     }
 
-    enableCookieGuardedContent() {
-        var { selectors } = this.options;
+    public enableCookieGuardedContent() {
+        const { selectors } = this.options;
 
-        var cookieGuardedElements = document.querySelectorAll(selectors.cookieGuard);
-        var parser = new DOMParser();
+        const cookieGuardedElements: NodeList = document.querySelectorAll(selectors.cookieGuard);
+        const parser = new DOMParser();
 
         if (!cookieGuardedElements.length) {
             return;
         }
 
-        Array.prototype.forEach.call(cookieGuardedElements, (element) => {
+        Array.prototype.forEach.call(cookieGuardedElements, (element: HTMLElement) => {
+            // element must have a content data attribute
+            if (!element.dataset.content) {
+                return;
+            }
+
             // Get script from content attribute
             let content = parser.parseFromString(element.dataset.content, 'text/html');
             let guardedScript = content.querySelector('script');
@@ -154,7 +165,11 @@ class FHCookieGuard {
             }
 
             // Replace the meta tag with the new script element
-            element.parentNode.replaceChild(newScriptElement, element);
+            let parentNode = element.parentNode;
+
+            if (parentNode) {
+                parentNode.replaceChild(newScriptElement, element);
+            }
         });
     }
 }

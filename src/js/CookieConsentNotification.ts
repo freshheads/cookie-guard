@@ -1,17 +1,32 @@
+import CookieConsentStore from "./CookieConsentStore";
+import { OptionsType } from "./types";
+
 class CookieConsentNotification {
-    constructor(cookieConsentNotificationElement, cookieConsentStore, options, onAcceptCallback = null) {
+    public cookieConsentNotificationElement: HTMLElement;
+    private cookieConsentStore: CookieConsentStore;
+    private options: OptionsType;
+    private onAcceptCallback: Function | null;
+    private acceptButton: HTMLElement | null = null;
+    private refuseButton: HTMLElement | null = null;
+    private parentContainer: HTMLElement;
+
+    constructor(
+        cookieConsentNotificationElement: HTMLElement,
+        cookieConsentStore: CookieConsentStore,
+        options: OptionsType,
+        onAcceptCallback: Function | null = null
+    ) {
         this.cookieConsentNotificationElement = cookieConsentNotificationElement;
         this.cookieConsentStore = cookieConsentStore;
         this.options = options;
         this.onAcceptCallback = onAcceptCallback;
 
-        this._onAcceptClick = this._onAcceptClick.bind(this);
-        this._onRefuseClick = this._onRefuseClick.bind(this);
+        this.parentContainer = document.querySelector(this.options.selectors.parentContainer) || document.body;
 
         this.init();
     }
 
-    init() {
+    public init() {
         const { selectors } = this.options;
 
         // notification html must be available, we do not create this with javascript
@@ -22,21 +37,20 @@ class CookieConsentNotification {
         // @todo better to select within notification element?
         this.acceptButton = document.querySelector(selectors.accept);
         this.refuseButton = document.querySelector(selectors.refuse);
-        this._parentContainer = document.querySelector(selectors.parentContainer);
 
         if (this.acceptButton) {
-            this.acceptButton.addEventListener('click', this._onAcceptClick);
+            this.acceptButton.addEventListener('click', this.onAcceptClick);
         }
 
         if (this.refuseButton) {
-            this.refuseButton.addEventListener('click', this._onRefuseClick);
+            this.refuseButton.addEventListener('click', this.onRefuseClick);
         }
     }
 
-    show() {
-        var { callbacks, activeClass } = this.options;
+    public show() {
+        const { callbacks, activeClass } = this.options;
 
-        this._parentContainer.classList.add(activeClass);
+        this.parentContainer.classList.add(activeClass);
         this.cookieConsentNotificationElement.setAttribute('aria-hidden', 'false');
 
         if (this.acceptButton) {
@@ -48,10 +62,10 @@ class CookieConsentNotification {
         }
     }
 
-    close() {
-        var { activeClass, callbacks } = this.options;
+    public close() {
+        const { activeClass, callbacks } = this.options;
 
-        this._parentContainer.classList.remove(activeClass);
+        this.parentContainer.classList.remove(activeClass);
         this.cookieConsentNotificationElement.setAttribute('aria-hidden', 'true');
 
         if (typeof callbacks.onCloseCookieAlert === 'function') {
@@ -59,7 +73,7 @@ class CookieConsentNotification {
         }
     }
 
-    _onAcceptClick() {
+    private onAcceptClick = () => {
         this.cookieConsentStore.accept();
         this.close();
 
@@ -68,7 +82,7 @@ class CookieConsentNotification {
         }
     }
 
-    _onRefuseClick() {
+    private onRefuseClick = () => {
         this.cookieConsentStore.refuse();
         this.close();
     }
