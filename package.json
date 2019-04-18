@@ -21,20 +21,6 @@
         "node": ">= 6.9.0 || >= 8.9.0"
     },
     "author": "Freshheads",
-    "contributors": [
-        {
-            "name": "Martin Broos",
-            "email": "martin.broos@freshheads.com"
-        },
-        {
-            "name": "Remco Abalain",
-            "email": "remco.abalain@freshheads.com"
-        },
-        {
-            "name": "Geert van de Langenberg",
-            "email": "geert.van.de.langenberg@freshheads.com"
-        }
-    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/freshheads/cookie-guard/issues"
