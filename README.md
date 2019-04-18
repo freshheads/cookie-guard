@@ -9,7 +9,7 @@ When accepting it will load guarded scripts in meta tags.
 * Transform data-content attribute to working script tag
 * Exclude cookie message on certain pages
 * Ready to use sass styling components for a variation of cookie notifications and popups
-* Ready to use twig example to be used with styling 
+* Ready to use twig example to be used with styling
 
 ## Documentation
 
@@ -19,8 +19,9 @@ When accepting it will load guarded scripts in meta tags.
 
 ## Browser support
 
-This library supports the latest 2 versions of all modern browsers + IE11. But support can be extended by using some polyfills.
-- IE10 support by adding element.dataset polyfill 
+This library supports the latest 2 versions of all modern browsers. But support can be extended by converting code to ES5 and using some polyfills.
+- IE11 convert ES2015 code to ES5 with webpack or another bundler
+- IE10 support by adding element.dataset polyfill
 
 ## Roadmap
 
