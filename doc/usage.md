@@ -10,7 +10,7 @@ import FHCookieGuard from '@freshheads/cookie-guard';
 
 ```javascript
 new FHCookieGuard('.js-cookie-alert', {
-   // Optional config options 
+   // Optional config options
 });
 ```
 
@@ -19,7 +19,7 @@ new FHCookieGuard('.js-cookie-alert', {
 ```twig
 {% if not cookie_settings_submitted() %}
     {% set excludedPages = [ path('cookies') ] %}
-    
+
     {% if app.request.requestUri not in excludedPages %}
         <div class="cookie-alert js-cookie-alert" role="alertdialog" aria-labelledby="cookie-alert-title" aria-describedby="cookie-alert-description" aria-hidden="true">
             <div class="cookie-alert__content">
@@ -65,8 +65,8 @@ Now it's guarded and the scripts will only be injected when the user accepts the
 You can use one of the predefined styles or create your own.
 
 ```scss
-@import "~@freshheads/cookie-guard/src/scss/popup";
-@import "~@freshheads/cookie-guard/src/scss/notification";
+@import "~@freshheads/cookie-guard/styles/popup";
+@import "~@freshheads/cookie-guard/styles/notification";
 ```
 
 ## 6. Handle cookie revocation
@@ -84,4 +84,4 @@ The cookie set by `cookie-guard` can be revoked by clicking on an element with t
 
 ## 7. Automatically accept cookies after x requests
 
-When option `autoAcceptCookieConsentAfterRequestCount` is set, cookies will be accepted automatically after x requests.  
+When option `autoAcceptCookieConsentAfterRequestCount` is set, cookies will be accepted automatically after x requests.
