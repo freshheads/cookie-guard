@@ -11,10 +11,12 @@ The library has the following options that can be set as the second parameter wh
         parentContainer: 'body'
     },
     cookieName: 'cookies-accepted',
+    cookieAttributes: {
+        expires: 90, // number of days or Date
+        path: '/',
+        domain: window.location.hostname,
+    },
     autoAcceptCookieConsentAfterRequestCount: null,
-    expireDays: 90,
-    path: '/',
-    domain: window.location.hostname,
     activeClass: 'cookie-alert-is-active',
     excludedPageUrls: [], // array with urls where cookie should not be shown (relative paths), this can also be a JSON encoded string
     callbacks: {

@@ -1,20 +1,19 @@
-import Cookie from 'js-cookie';
+import Cookie, { CookieAttributes } from 'js-cookie';
 import CookieConsentStore from './CookieConsentStore';
-import { CookieAttributesType } from './types';
 
 const REQUEST_COUNT_COOKIE_NAME = 'fh-cookie-guard-request-count';
 
 class AutoAcceptRequestWatcher {
     private cookieConsentStore: CookieConsentStore;
     private autoAcceptCookieConsentAfterRequestCount: number;
-    private cookieAttributes: CookieAttributesType;
+    private cookieAttributes: CookieAttributes;
     private onAutoAcceptCallback: Function | null;
     public currentRequestCount: number = 0;
 
     constructor(
         cookieConsentStore: CookieConsentStore,
         autoAcceptCookieConsentAfterRequestCount: number,
-        cookieAttributes: CookieAttributesType,
+        cookieAttributes: CookieAttributes,
         onAutoAcceptCallback: Function | null = null
     ) {
         this.cookieConsentStore = cookieConsentStore;

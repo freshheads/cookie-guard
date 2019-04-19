@@ -1,16 +1,12 @@
-import Cookie from 'js-cookie';
+import Cookie, { CookieAttributes } from 'js-cookie';
 
 class CookieConsentStore {
     private cookieName: string;
-    private expireDays: number;
-    private domain: string;
-    private path: string;
+    private cookieAttributes: CookieAttributes;
 
-    constructor(cookieName: string, expireDays: number, domain: string, path: string) {
+    constructor(cookieName: string, cookieAttributes: CookieAttributes) {
         this.cookieName = cookieName;
-        this.expireDays = expireDays;
-        this.domain = domain;
-        this.path = path;
+        this.cookieAttributes = cookieAttributes;
     }
 
     public accept() {
@@ -22,10 +18,7 @@ class CookieConsentStore {
     }
 
     public revoke() {
-        Cookie.remove(this.cookieName, {
-            domain: this.domain,
-            path: this.path,
-        });
+        Cookie.remove(this.cookieName, this.cookieAttributes);
     }
 
     public hasBeenSet() {
@@ -37,11 +30,7 @@ class CookieConsentStore {
     }
 
     private setValue(value: string) {
-        Cookie.set(this.cookieName, value, {
-            expires: this.expireDays,
-            domain: this.domain,
-            path: this.path
-        });
+        Cookie.set(this.cookieName, value, this.cookieAttributes);
     }
 }
 

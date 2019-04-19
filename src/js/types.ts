@@ -1,3 +1,5 @@
+import { CookieAttributes } from "js-cookie";
+
 export interface OptionsType {
     selectors: {
         accept: string,
@@ -6,10 +8,8 @@ export interface OptionsType {
         parentContainer: string
     },
     cookieName: string,
+    cookieAttributes: CookieAttributes,
     autoAcceptCookieConsentAfterRequestCount: number | null,
-    expireDays: number,
-    domain: string,
-    path: string,
     activeClass: string,
     excludedPageUrls: Array<string>,
     callbacks: {
@@ -19,9 +19,3 @@ export interface OptionsType {
 }
 
 export type UserOptionsType = Partial<OptionsType>;
-
-export interface CookieAttributesType {
-    domain: string,
-    path: string,
-    expireDays ?: number,
-}

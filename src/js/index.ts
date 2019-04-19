@@ -22,10 +22,12 @@ class FHCookieGuard {
                 parentContainer: 'body'
             },
             cookieName: 'cookies-accepted',
+            cookieAttributes: {
+                expires: 90,
+                domain: window.location.hostname,
+                path: '/',
+            },
             autoAcceptCookieConsentAfterRequestCount: null,
-            expireDays: 90,
-            domain: window.location.hostname,
-            path: '/',
             activeClass: 'cookie-alert-is-active',
             excludedPageUrls: [],
             callbacks: {
@@ -43,9 +45,7 @@ class FHCookieGuard {
 
         this.cookieConsentStore = new CookieConsentStore(
             this.options.cookieName,
-            this.options.expireDays,
-            this.options.domain,
-            this.options.path
+            this.options.cookieAttributes,
         );
 
         this.init();
@@ -75,16 +75,11 @@ class FHCookieGuard {
     }
 
     private initAutoAcceptCookieConsentIfNeeded() {
-        const { autoAcceptCookieConsentAfterRequestCount, domain, path } = this.options;
+        const { autoAcceptCookieConsentAfterRequestCount, cookieAttributes } = this.options;
 
         if (autoAcceptCookieConsentAfterRequestCount === null || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
         }
-
-        const cookieAttributes = {
-            domain: domain,
-            path: path
-        };
 
         new AutoAcceptRequestWatcher(
             this.cookieConsentStore,
