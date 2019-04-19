@@ -57,7 +57,6 @@ class FHCookieGuard {
     }
 
     private initCookieConsentNotificationIfNeeded() {
-        // @todo make it more clear that excluxedPages is only for the notification and request watcher
         if (!this.cookieConsentNotificationElement || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
         }

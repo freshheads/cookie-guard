@@ -18,7 +18,7 @@ The library has the following options that can be set as the second parameter wh
     },
     autoAcceptCookieConsentAfterRequestCount: null,
     activeClass: 'cookie-alert-is-active',
-    excludedPageUrls: [], // array with urls where cookie should not be shown (relative paths), this can also be a JSON encoded string
+    excludedPageUrls: [], // array with urls where cookie notification should not be shown and watcher will not count (relative paths), this can also be a JSON encoded string
     callbacks: {
         onOpenCookieAlert: null, // add function that will be triggered after alert opens
         onCloseCookieAlert: null, // add function that will be triggered after alert closes
