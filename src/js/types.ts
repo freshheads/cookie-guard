@@ -2,7 +2,6 @@ export interface OptionsType {
     selectors: {
         accept: string,
         refuse: string,
-        revoke: string,
         cookieGuard: string,
         parentContainer: string
     },
@@ -17,7 +16,6 @@ export interface OptionsType {
     callbacks: {
         onOpenCookieAlert: Function | null,
         onCloseCookieAlert: Function | null,
-        onRevoke: Function | null
     }
 }
 

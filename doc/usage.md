@@ -69,17 +69,28 @@ You can use one of the predefined styles or create your own.
 @import "~@freshheads/cookie-guard/styles/notification";
 ```
 
-## 6. Handle cookie revocation
+## 6. Handle cookie revocation or accepting / refusing without a cookie notification
 
-The cookie set by `cookie-guard` can be revoked by clicking on an element with the class provided in the `selectors.revoke` option. Clicking an element with this class will remove the cookie and essentially reset the setup. It's advised to reload or redirect the page when a user revokes the cookies so the notification will show up again, which can be done using the `onRevoke` callback.
+The cookie set by `cookie-guard` can be revoked, refused or accepted  without using the supplied notification. This might be needed on a cookie settings page when the user already made a decision.
+To handle this situation the library exposes the cookie consent store.
 
 ```js
-{
-    // ...
-    onRevoke: (revokeButtonElement) => {
-        window.location.reload();
-    }
-}
+const cookieGuard = new FHCookieGuard();
+const acceptButton = document.getElementById('js-accept-cookie-consent');
+
+acceptButton.addEventListener('click', () => {
+    cookieGuard.cookieConsentStore.accept();
+    cookieGuard.enableCookieGuardedContent();
+});
+```
+
+Revoking will remove the cookie and esssentially reset the setup. It's advised to reload or redirect the page when a user revokes the cookies so the notification will show up again.
+
+```js
+revokeButton.addEventListener('click', () => {
+    cookieGuard.cookieConsentStore.revoke();
+    window.location.reload();
+});
 ```
 
 ## 7. Automatically accept cookies after x requests

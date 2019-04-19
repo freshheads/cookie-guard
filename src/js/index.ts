@@ -8,8 +8,8 @@ import { OptionsType, UserOptionsType } from './types';
 class FHCookieGuard {
     public cookieConsentNotificationElement: HTMLElement | null;
     public cookieConsentNotification ?: CookieConsentNotification;
+    public cookieConsentStore: CookieConsentStore;
     private options: OptionsType;
-    private cookieConsentStore: CookieConsentStore;
 
     constructor(notificationElementSelector = '.js-cookie-alert', options: UserOptionsType = {}) {
         this.cookieConsentNotificationElement = document.querySelector(notificationElementSelector);
@@ -18,7 +18,6 @@ class FHCookieGuard {
             selectors: {
                 accept: '.js-cookie-alert-accept',
                 refuse: '.js-cookie-alert-refuse',
-                revoke: '.js-cookie-alert-revoke',
                 cookieGuard: '.js-cookie-guarded',
                 parentContainer: 'body'
             },
@@ -33,7 +32,6 @@ class FHCookieGuard {
             callbacks: {
                 onOpenCookieAlert: null,
                 onCloseCookieAlert: null,
-                onRevoke: null
             }
         };
 
@@ -57,9 +55,6 @@ class FHCookieGuard {
     public init() {
         this.initCookieConsentNotificationIfNeeded();
         this.initAutoAcceptCookieConsentIfNeeded();
-        this.initRevoke();
-
-        // @todo add event listeners to accept or refuse cookies without notification, usefull for settings block
     }
 
     private initCookieConsentNotificationIfNeeded() {
@@ -106,28 +101,6 @@ class FHCookieGuard {
                 }
             }
         );
-    }
-
-    private initRevoke() {
-        const { selectors } = this.options;
-
-        const revokeElements: NodeList = document.querySelectorAll(selectors.revoke);
-
-        Array.prototype.forEach.call(revokeElements, (element: HTMLElement) => {
-            element.addEventListener('click', this.onRevokeCookiesClick);
-        });
-    }
-
-    private onRevokeCookiesClick = (event: Event) => {
-        event.preventDefault();
-
-        const { callbacks } = this.options;
-
-        this.cookieConsentStore.revoke();
-
-        if (typeof callbacks.onRevoke === 'function') {
-            callbacks.onRevoke(event.target);
-        }
     }
 
     public enableCookieGuardedContent() {
