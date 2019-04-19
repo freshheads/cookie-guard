@@ -1,23 +1,25 @@
 import Cookie from 'js-cookie';
 import CookieConsentStore from './CookieConsentStore';
-import { CookieSettingsType } from './types';
+import { CookieAttributesType } from './types';
+
+const REQUEST_COUNT_COOKIE_NAME = 'fh-cookie-guard-request-count';
 
 class AutoAcceptRequestWatcher {
     private cookieConsentStore: CookieConsentStore;
     private autoAcceptCookieConsentAfterRequestCount: number;
-    private cookieSettings: CookieSettingsType;
+    private cookieAttributes: CookieAttributesType;
     private onAutoAcceptCallback: Function | null;
     public currentRequestCount: number = 0;
 
     constructor(
         cookieConsentStore: CookieConsentStore,
         autoAcceptCookieConsentAfterRequestCount: number,
-        cookieSettings: CookieSettingsType,
+        cookieAttributes: CookieAttributesType,
         onAutoAcceptCallback: Function | null = null
     ) {
         this.cookieConsentStore = cookieConsentStore;
         this.autoAcceptCookieConsentAfterRequestCount = autoAcceptCookieConsentAfterRequestCount;
-        this.cookieSettings = cookieSettings;
+        this.cookieAttributes = cookieAttributes;
         this.onAutoAcceptCallback = onAutoAcceptCallback;
 
         this.setCurrentRequestCount();
@@ -25,7 +27,7 @@ class AutoAcceptRequestWatcher {
     }
 
     private setCurrentRequestCount() {
-        const requestCountFromSession = Cookie.get(this.cookieSettings.name);
+        const requestCountFromSession = Cookie.get(REQUEST_COUNT_COOKIE_NAME);
 
         this.currentRequestCount = requestCountFromSession ? parseInt(requestCountFromSession) : 0;
     }
@@ -46,9 +48,9 @@ class AutoAcceptRequestWatcher {
     }
 
     private setRequestCounterSessionCookie(value: number) {
-        const { name, domain, path } = this.cookieSettings;
+        const { domain, path } = this.cookieAttributes;
 
-        Cookie.set(name, value.toString(), {
+        Cookie.set(REQUEST_COUNT_COOKIE_NAME, value.toString(), {
             domain,
             path
         });

@@ -23,7 +23,6 @@ class FHCookieGuard {
             },
             cookieName: 'cookies-accepted',
             autoAcceptCookieConsentAfterRequestCount: null,
-            autoAcceptCookieConsentName: 'current-request-count',
             expireDays: 90,
             domain: window.location.hostname,
             path: '/',
@@ -76,15 +75,13 @@ class FHCookieGuard {
     }
 
     private initAutoAcceptCookieConsentIfNeeded() {
-        // @todo make a separate settings key for auto accept watcher
-        const { autoAcceptCookieConsentAfterRequestCount, autoAcceptCookieConsentName, domain, path } = this.options;
+        const { autoAcceptCookieConsentAfterRequestCount, domain, path } = this.options;
 
         if (autoAcceptCookieConsentAfterRequestCount === null || this.cookieConsentStore.hasBeenSet() || isCurrentPageExcluded(this.options.excludedPageUrls)) {
             return;
         }
 
-        const autoAcceptSettings = {
-            name: autoAcceptCookieConsentName,
+        const cookieAttributes = {
             domain: domain,
             path: path
         };
@@ -92,7 +89,7 @@ class FHCookieGuard {
         new AutoAcceptRequestWatcher(
             this.cookieConsentStore,
             autoAcceptCookieConsentAfterRequestCount,
-            autoAcceptSettings,
+            cookieAttributes,
             () => {
                 this.enableCookieGuardedContent();
 

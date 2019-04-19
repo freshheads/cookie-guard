@@ -7,7 +7,6 @@ export interface OptionsType {
     },
     cookieName: string,
     autoAcceptCookieConsentAfterRequestCount: number | null,
-    autoAcceptCookieConsentName: string,
     expireDays: number,
     domain: string,
     path: string,
@@ -15,14 +14,13 @@ export interface OptionsType {
     excludedPageUrls: Array<string>,
     callbacks: {
         onOpenCookieAlert: Function | null,
-        onCloseCookieAlert: Function | null,
+        onCloseCookieAlert: Function | null
     }
 }
 
 export type UserOptionsType = Partial<OptionsType>;
 
-export interface CookieSettingsType {
-    name: string,
+export interface CookieAttributesType {
     domain: string,
     path: string,
     expireDays ?: number,
