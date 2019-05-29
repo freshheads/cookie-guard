@@ -10,7 +10,7 @@ import FHCookieGuard from '@freshheads/cookie-guard';
 
 ```javascript
 new FHCookieGuard('.js-cookie-alert', {
-   // Optional config options 
+   // Optional config options
 });
 ```
 
@@ -19,7 +19,7 @@ new FHCookieGuard('.js-cookie-alert', {
 ```twig
 {% if not cookie_settings_submitted() %}
     {% set excludedPages = [ path('cookies') ] %}
-    
+
     {% if app.request.requestUri not in excludedPages %}
         <div class="cookie-alert js-cookie-alert" role="alertdialog" aria-labelledby="cookie-alert-title" aria-describedby="cookie-alert-description" aria-hidden="true">
             <div class="cookie-alert__content">
@@ -65,23 +65,34 @@ Now it's guarded and the scripts will only be injected when the user accepts the
 You can use one of the predefined styles or create your own.
 
 ```scss
-@import "~@freshheads/cookie-guard/src/scss/popup";
-@import "~@freshheads/cookie-guard/src/scss/notification";
+@import "~@freshheads/cookie-guard/styles/popup";
+@import "~@freshheads/cookie-guard/styles/notification";
 ```
 
-## 6. Handle cookie revocation
+## 6. Handle cookie revocation or accepting / refusing without a cookie notification
 
-The cookie set by `cookie-guard` can be revoked by clicking on an element with the class provided in the `selectors.revoke` option. Clicking an element with this class will remove the cookie and essentially reset the setup. It's advised to reload or redirect the page when a user revokes the cookies so the notification will show up again, which can be done using the `onRevoke` callback.
+The cookie set by `cookie-guard` can be revoked, refused or accepted  without using the supplied notification. This might be needed on a cookie settings page when the user already made a decision.
+To handle this situation the library exposes the cookie consent store.
 
 ```js
-{
-    // ...
-    onRevoke: (revokeButtonElement) => {
-        window.location.reload();
-    }
-}
+const cookieGuard = new FHCookieGuard();
+const acceptButton = document.getElementById('js-accept-cookie-consent');
+
+acceptButton.addEventListener('click', () => {
+    cookieGuard.cookieConsentStore.accept();
+    cookieGuard.enableCookieGuardedContent();
+});
+```
+
+Revoking will remove the cookie and esssentially reset the setup. It's advised to reload or redirect the page when a user revokes the cookies so the notification will show up again.
+
+```js
+revokeButton.addEventListener('click', () => {
+    cookieGuard.cookieConsentStore.revoke();
+    window.location.reload();
+});
 ```
 
 ## 7. Automatically accept cookies after x requests
 
-When option `autoAcceptCookieConsentAfterRequestCount` is set, cookies will be accepted automatically after x requests.  
+When option `autoAcceptCookieConsentAfterRequestCount` is set, cookies will be accepted automatically after x requests.
