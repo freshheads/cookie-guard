@@ -1,4 +1,4 @@
-import { merge } from 'lodash-es';
+import { merge } from 'lodash';
 import CookieConsentStore from './CookieConsentStore';
 import CookieConsentNotification from './CookieConsentNotification';
 import AutoAcceptRequestWatcher from './AutoAcceptRequestWatcher';

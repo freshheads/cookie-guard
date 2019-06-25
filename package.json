@@ -3,14 +3,13 @@
     "version": "3.0.0-alpha.0",
     "description": "Let user manage cookie usage",
     "main": "build/index.js",
-    "es5": "build/es5/index.js",
     "types": "build/index.d.ts",
     "files": [
         "build",
         "styles"
     ],
     "scripts": {
-        "build": "concurrently \"tsc\" \"tsc -p ./tsconfig.es5.json \"",
+        "build": "tsc",
         "build:watch": "tsc --watch",
         "prepare": "npm run build"
     },
@@ -28,13 +27,12 @@
     },
     "devDependencies": {
         "@types/js-cookie": "^2.2.2",
-        "@types/lodash-es": "^4.17.3",
-        "concurrently": "^4.1.0",
+        "@types/lodash": "^4.14.134",
         "typescript": "^3.4.3"
     },
     "dependencies": {
         "js-cookie": "^2.2.0",
-        "lodash-es": "^4.17.11"
+        "lodash": "^4.17.11"
     },
     "homepage": "https://github.com/freshheads/cookie-guard#readme",
     "directories": {
