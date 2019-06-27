@@ -21,7 +21,7 @@ When accepting it will load guarded scripts in meta tags.
 ## Browser support
 
 This library supports the latest 2 versions of all modern browsers. But support can be extended by converting code to ES5 and using some polyfills.
-- IE11 convert ES2015 code to ES5 with webpack or another bundler
+- ~~IE11 convert ES2015 code to ES5 with webpack or another bundler~~ Still using ES5 build for now due to import issues in webpack with babel
 - IE10 support by adding element.dataset polyfill
 
 ## Roadmap
