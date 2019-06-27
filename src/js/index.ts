@@ -1,4 +1,4 @@
-import merge from 'deepmerge';
+import { merge } from 'lodash';
 import CookieConsentStore from './CookieConsentStore';
 import CookieConsentNotification from './CookieConsentNotification';
 import AutoAcceptRequestWatcher from './AutoAcceptRequestWatcher';
@@ -37,11 +37,11 @@ class FHCookieGuard {
         };
 
         // merge default options with user options coming from initialisation and data attributes on notification element
-        this.options = merge.all<OptionsType>([
+        this.options = merge<OptionsType, Partial<OptionsType>, Partial<OptionsType>>(
             defaultOptions,
             options,
             this.cookieConsentNotificationElement ? this.cookieConsentNotificationElement.dataset : {}
-        ]);
+        );
 
         this.cookieConsentStore = new CookieConsentStore(
             this.options.cookieName,
