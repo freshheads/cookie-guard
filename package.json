@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsup src/js/index.ts --format esm,cjs --dts --external react",
-        "prepare": "npm run build"
+        "prepare": "npm run build",
+        "prettier": "prettier --write 'src/**/*.{ts,tsx}'"
     },
     "files": [
         "dist",
@@ -34,11 +35,13 @@
         "@types/js-cookie": "^2.2.2",
         "@types/lodash": "^4.14.134",
         "@types/react": "^18.0.31",
-        "tsup": "^6.7.0",
-        "typescript": "^4.9.5",
+        "@types/react-dom": "^18.0.11",
+        "@vitejs/plugin-react": "^3.1.0",
+        "prettier": "^2.8.7",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "@vitejs/plugin-react": "^3.1.0",
+        "tsup": "^6.7.0",
+        "typescript": "^4.9.5",
         "vite": "^4.2.0"
     },
     "dependencies": {
