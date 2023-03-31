@@ -4,7 +4,7 @@
     "description": "Let user manage cookie usage",
     "scripts": {
         "dev": "vite",
-            "build": "tsup src/js/index.ts --format esm,cjs --dts --external react",
+        "build": "tsup src/js/index.ts --format esm,cjs --dts --external react",
         "prepare": "npm run build"
     },
     "files": [

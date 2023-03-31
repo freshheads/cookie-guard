@@ -3,7 +3,7 @@ import React from 'react';
 const CookiePopup = () => {
     return (
         <div>
-            Test fsdfds
+            <h1>Cookie Popup</h1>
         </div>
     );
 };
