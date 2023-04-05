@@ -4,19 +4,22 @@
     "description": "Let user manage cookie usage",
     "scripts": {
         "dev": "vite",
-        "build": "tsup src/js/index.ts --format esm,cjs --dts --external react",
+        "build": "vite build",
+        "preview": "vite preview",
         "prepare": "npm run build",
         "prettier": "prettier --write 'src/**/*.{ts,tsx}'"
     },
     "files": [
-        "dist",
-        "styles"
+        "dist"
     ],
     "types": "./dist/index.d.ts",
+    "type": "module",
+    "main": "./dist/cookie-guard.cjs",
+    "module": "./dist/cookie-guard.js",
     "exports": {
         ".": {
-            "require": "./dist/index.js",
-            "import": "./dist/index.mjs"
+            "require": "./dist/index.cjs",
+            "import": "./dist/index.js"
         }
     },
     "repository": {
@@ -37,10 +40,10 @@
         "@types/react": "^18.0.31",
         "@types/react-dom": "^18.0.11",
         "@vitejs/plugin-react": "^3.1.0",
+        "path": "^0.12.7",
         "prettier": "^2.8.7",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "tsup": "^6.7.0",
         "typescript": "^4.9.5",
         "vite": "^4.2.0"
     },

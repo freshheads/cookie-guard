@@ -1,1 +1,5 @@
-export * from './components/CookiePopup';
+import CookiePopup from './components/CookiePopup';
+
+export {
+    CookiePopup,
+}
