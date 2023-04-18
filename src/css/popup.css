@@ -1,4 +1,4 @@
-/* @todo styling is from old lib, needs rework. */
+/* @todo basic styling, needs rework. */
 :root {
     --cookie-alert-bg-color: #fff;
     --cookie-alert-overlay-color: rgba(255 255 255 / 0.8);
@@ -11,61 +11,31 @@
     z-index: var(--cookie-alert-zindex);
     top: 0;
     left: 0;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    min-height: 100%;
+    width: 500px;
+    max-width: 90vw;
+    margin: auto;
     overflow-y: auto;
-    transform: translateY(-100%);
+    transform: translateY(0);
     background-color: var(--cookie-alert-overlay-color);
-    opacity: 0;
+    inset: 0;
     transition: opacity 0.4s ease, transform 0s 0.4s;
 
-    &.cookie-alert-is-active {
-        transform: translateY(0);
-        opacity: 1;
+    &::backdrop {
+        background-color: var(--cookie-alert-overlay-color);
+    }
+
+    &:not([open]) {
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-100%);
         transition: opacity 0.4s ease, transform 0s 0s;
     }
 }
 
-.cookie-alert__content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    align-self: center;
-    max-width: 600px;
-    padding: 2rem;
-    margin: 1rem;
-    transform: translateY(-100vh);
-    background-color: var(--cookie-alert-bg-color);
-    opacity: 0;
-    transition: opacity 0s 0.4s, transform 0.4s ease;
-
-    .cookie-alert-is-active & {
-        transform: translateY(0);
-        opacity: 1;
-        transition: opacity 0.2s 0.2s, transform 0.4s ease;
-    }
-
-    @media screen and (min-width: 600px) {
-        position: relative;
-    }
-}
-
-.cookie-alert__header {
-    margin-bottom: 1rem;
-}
-
 .cookie-alert__title {
-    display: block;
-    margin: 0;
     font-size: var(--cookie-alert-title-font-size);
 }
 
 .cookie-alert__description {
     margin: 0 0 2rem;
-}
-
-.cookie-alert__link {
-    text-decoration: underline;
 }
