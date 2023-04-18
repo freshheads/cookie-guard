@@ -2,8 +2,8 @@ import React from 'react';
 
 const CookiePopup = () => {
     return (
-        <div>
-            <h1>Cookie Popup</h1>
+        <div className="cookie-alert cookie-alert-is-active">
+            <div className="cookie-alert__content"><h1 className="cookie-alert__title">Cookie Popup</h1></div>
         </div>
     );
 };

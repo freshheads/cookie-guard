@@ -1,4 +1,4 @@
-/* @todo styling is from old lib, needs some rework. also we could add post css so nesting is possible*/
+/* @todo styling is from old lib, needs rework. */
 :root {
     --cookie-alert-bg-color: #fff;
     --cookie-alert-overlay-color: rgba(255 255 255 / 0.8);
@@ -20,12 +20,12 @@
     background-color: var(--cookie-alert-overlay-color);
     opacity: 0;
     transition: opacity 0.4s ease, transform 0s 0.4s;
-}
 
-.cookie-alert-is-active .cookie-alert {
-    transform: translateY(0);
-    opacity: 1;
-    transition: opacity 0.4s ease, transform 0s 0s;
+    &.cookie-alert-is-active {
+        transform: translateY(0);
+        opacity: 1;
+        transition: opacity 0.4s ease, transform 0s 0s;
+    }
 }
 
 .cookie-alert__content {
@@ -40,12 +40,16 @@
     background-color: var(--cookie-alert-bg-color);
     opacity: 0;
     transition: opacity 0s 0.4s, transform 0.4s ease;
-}
 
-.cookie-alert-is-active .cookie-alert__content {
-    transform: translateY(0);
-    opacity: 1;
-    transition: opacity 0.2s 0.2s, transform 0.4s ease;
+    .cookie-alert-is-active & {
+        transform: translateY(0);
+        opacity: 1;
+        transition: opacity 0.2s 0.2s, transform 0.4s ease;
+    }
+
+    @media screen and (min-width: 600px) {
+        position: relative;
+    }
 }
 
 .cookie-alert__header {
@@ -64,10 +68,4 @@
 
 .cookie-alert__link {
     text-decoration: underline;
-}
-
-@media screen and (min-width: 600px) {
-    .cookie-alert__content {
-        position: relative;
-    }
 }

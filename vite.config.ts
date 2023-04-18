@@ -19,7 +19,7 @@ export default defineConfig({
           react: 'React'
         }
       }
-    }
+    },
   },
   plugins: [react()],
 })
