@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {FC} from 'react';
 
-const CookiePopup = () => {
+const CookiePopup: FC = () => {
     return (
         <dialog className="cookie-alert" open>
             <h1 className="cookie-alert__title">Cookie Popup</h1>
