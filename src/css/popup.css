@@ -1,0 +1,41 @@
+/* @todo basic styling, needs rework. */
+:root {
+    --cookie-alert-bg-color: #fff;
+    --cookie-alert-overlay-color: rgba(255 255 255 / 0.8);
+    --cookie-alert-title-font-size: 2rem;
+    --cookie-alert-zindex: 99999;
+}
+
+.cookie-alert {
+    position: fixed;
+    z-index: var(--cookie-alert-zindex);
+    top: 0;
+    left: 0;
+    width: 500px;
+    max-width: 90vw;
+    margin: auto;
+    overflow-y: auto;
+    transform: translateY(0);
+    background-color: var(--cookie-alert-overlay-color);
+    inset: 0;
+    transition: opacity 0.4s ease, transform 0s 0.4s;
+
+    &::backdrop {
+        background-color: var(--cookie-alert-overlay-color);
+    }
+
+    &:not([open]) {
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-100%);
+        transition: opacity 0.4s ease, transform 0s 0s;
+    }
+}
+
+.cookie-alert__title {
+    font-size: var(--cookie-alert-title-font-size);
+}
+
+.cookie-alert__description {
+    margin: 0 0 2rem;
+}

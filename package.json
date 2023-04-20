@@ -4,18 +4,22 @@
     "description": "Let user manage cookie usage",
     "scripts": {
         "dev": "vite",
-        "build": "tsup src/js/index.ts --format esm,cjs --dts --external react",
-        "prepare": "npm run build"
+        "build": "vite build && tsc --noEmit",
+        "preview": "vite preview",
+        "prepare": "npm run build",
+        "prettier": "prettier --write 'src/**/*.{ts,tsx}'"
     },
     "files": [
-        "dist",
-        "styles"
+        "dist"
     ],
     "types": "./dist/index.d.ts",
+    "type": "module",
+    "main": "./dist/cookie-guard.cjs",
+    "module": "./dist/cookie-guard.js",
     "exports": {
         ".": {
-            "require": "./dist/index.js",
-            "import": "./dist/index.mjs"
+            "require": "./dist/index.cjs",
+            "import": "./dist/index.js"
         }
     },
     "repository": {
@@ -34,12 +38,16 @@
         "@types/js-cookie": "^2.2.2",
         "@types/lodash": "^4.14.134",
         "@types/react": "^18.0.31",
-        "tsup": "^6.7.0",
-        "typescript": "^4.9.5",
+        "@types/react-dom": "^18.0.11",
+        "@vitejs/plugin-react": "^3.1.0",
+        "path": "^0.12.7",
+        "postcss-nesting": "^11.2.2",
+        "prettier": "^2.8.7",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "@vitejs/plugin-react": "^3.1.0",
-        "vite": "^4.2.0"
+        "typescript": "^4.9.5",
+        "vite": "^4.2.0",
+        "vite-plugin-dts": "^2.3.0"
     },
     "dependencies": {
         "js-cookie": "^2.2.0",
