@@ -1,7 +1,6 @@
 /* @todo basic styling, needs rework. */
 :root {
     --cookie-alert-bg-color: #fff;
-    --cookie-alert-overlay-color: rgba(255 255 255 / 0.8);
     --cookie-alert-title-font-size: 2rem;
     --cookie-alert-zindex: 99999;
 }
@@ -16,12 +15,13 @@
     margin: auto;
     overflow-y: auto;
     transform: translateY(0);
-    background-color: var(--cookie-alert-overlay-color);
+    background-color: var(--cookie-alert-bg-color);
     inset: 0;
     transition: opacity 0.4s ease, transform 0s 0.4s;
 
     &::backdrop {
-        background-color: var(--cookie-alert-overlay-color);
+        backdrop-filter: blur(2px);
+        background-color: rgb(0 0 0 / 20%);
     }
 
     &:not([open]) {

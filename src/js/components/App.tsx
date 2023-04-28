@@ -1,28 +1,11 @@
-import { useState } from 'react';
-import viteLogo from '/vite.svg';
 import CookiePopup from './CookiePopup';
 
 function App() {
-    const [count, setCount] = useState(0);
-
     return (
-        <div className="App">
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
+        <div className="container">
+            <h1>Freshheads Cookie Guard</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti et illum itaque maxime nemo nesciunt temporibus, voluptates. Delectus ipsa ipsum itaque iusto laudantium, minus nisi numquam pariatur rerum similique temporibus.
             </p>
 
             <CookiePopup />
