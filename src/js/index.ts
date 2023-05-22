@@ -1,5 +1,3 @@
-import CookiePopup from './components/CookiePopup';
+import { CookieGuard } from './components/CookieGuard';
 
-export {
-    CookiePopup,
-}
+export { CookieGuard };
