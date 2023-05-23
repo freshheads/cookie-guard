@@ -1,13 +1,20 @@
-import { ReactNode } from 'react';
-import { CookieGuard } from './CookieGuard';
+import { CookieGuard, CookieGuardProps } from './CookieGuard';
+import { useCookies } from '../hooks/useCookies';
+import { NeedsCookie } from './NeedsCookies';
 
-const cookieProps = {
+const cookieProps: CookieGuardProps = {
     title: 'Onze site maakt gebruik van cookies.',
-    beforeOptions:
+    description:
         'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
+    acceptAllLabel: 'Alle cookies accepteren',
+    saveLabel: 'Opslaan',
+    functionalLabel: 'Noodzakelijke cookies',
+    analyticsLabel: 'Analytische cookies',
+    marketingLabel: 'Marketing cookies',
 };
 
 function App() {
+    const { clearCookies, cookies, setCookies } = useCookies();
     return (
         <div className="container">
             <h1>Freshheads Cookie Guard</h1>
@@ -17,8 +24,31 @@ function App() {
                 voluptates. Delectus ipsa ipsum itaque iusto laudantium, minus
                 nisi numquam pariatur rerum similique temporibus.
             </p>
-
+            <button onClick={() => clearCookies()}>clearCookies</button>
             <CookieGuard {...cookieProps} />
+
+            <NeedsCookie
+                cookieRequirement="marketing"
+                fallback={
+                    <div>
+                        je mag dit alleen zien als je marketing cookies hebt
+                        geaccepteerd.{' '}
+                        <button onClick={() => setCookies({ marketing: true })}>
+                            accepteer marketing cookies
+                        </button>
+                    </div>
+                }
+            >
+                <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube-nocookie.com/embed/UYwV_Np4Asw"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                ></iframe>
+            </NeedsCookie>
         </div>
     );
 }

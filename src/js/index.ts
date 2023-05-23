@@ -1,3 +1,13 @@
-import { CookieGuard } from './components/CookieGuard';
+import { CookieGuard, CookieGuardProps } from './components/CookieGuard';
+import { useCookies } from './hooks/useCookies';
+import { CookieGuardContext } from './context/CookieGuardContext';
+import { CookieGuardContextProvider } from './context/CookieGuardContextProvider';
 
-export { CookieGuard };
+export {
+    CookieGuard,
+    useCookies,
+    CookieGuardContext,
+    CookieGuardContextProvider,
+};
+
+export type { CookieGuardProps };
