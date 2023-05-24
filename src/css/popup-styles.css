@@ -99,36 +99,42 @@
     background: var(--cookie-guard-button-background-color);
     color: var(--cookie-guard-button-color);
     cursor: pointer;
+    &:hover {
+        background: var(--cookie-guard-button-hover-background-color);
+        color: var(--cookie-guard-button-hover-color);
+    }
+
+    &:focus {
+        outline: var(--cookie-guard-button-background-color) solid 2px;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        background: var(--cookie-guard-button-hover-background-color);
+        color: var(--cookie-guard-button-hover-color);
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
-.cookieguard__button:hover {
-    background: var(--cookie-guard-button-hover-background-color);
-    color: var(--cookie-guard-button-hover-color);
-}
-.cookieguard__button:focus {
-    outline: var(--cookie-guard-button-background-color) solid 2px;
-    outline-offset: 2px;
-}
-.cookieguard__button:active {
-    background: var(--cookie-guard-button-hover-background-color);
-    color: var(--cookie-guard-button-hover-color);
-}
-.cookieguard__button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+
 .cookieguard__button--primary {
     background: var(--cookie-guard-button-primary-background-color);
     color: var(--cookie-guard-button-primary-color);
-}
-.cookieguard__button--primary:hover {
-    background: var(--cookie-guard-button-hover-primary-background-color);
-    color: var(--cookie-guard-button-hover-primary-color);
-}
-.cookieguard__button--primary:focus {
-    outline: var(--cookie-guard-button-primary-background-color) solid 2px;
-    outline-offset: 2px;
-}
-.cookieguard__button--primary:active {
-    background: var(--cookie-guard-button-hover-primary-background-color);
-    color: var(--cookie-guard-button-hover-primary-color);
+
+    &:hover {
+        background: var(--cookie-guard-button-hover-primary-background-color);
+        color: var(--cookie-guard-button-hover-primary-color);
+    }
+
+    &:focus {
+        outline: var(--cookie-guard-button-primary-background-color) solid 2px;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        background: var(--cookie-guard-button-hover-primary-background-color);
+        color: var(--cookie-guard-button-hover-primary-color);
+    }
 }
