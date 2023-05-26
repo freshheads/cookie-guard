@@ -8,10 +8,10 @@ export const Checkbox: FC<{
     disabled?: boolean;
 }> = ({ label, name, value, onChange, disabled }) => {
     return (
-        <label htmlFor={name} className="cookieguard__checkbox-label">
+        <label htmlFor={name} className="cookiebanner__checkbox-label">
             <input
                 id={name}
-                className="cookieguard__checkbox"
+                className="cookiebanner__checkbox"
                 type="checkbox"
                 name={name}
                 checked={value}

@@ -1,6 +1,7 @@
 import { CookieBanner, CookieBannerProps } from './CookieBanner';
 import { useCookies } from '../hooks/useCookies';
 import { NeedsCookie } from './NeedsCookies';
+import { CookieCategory } from '../types/cookies';
 
 const cookieProps: CookieBannerProps = {
     title: 'Onze site maakt gebruik van cookies.',
@@ -15,7 +16,7 @@ const cookieProps: CookieBannerProps = {
 };
 
 function App() {
-    const { clearCookies, cookies, setCookies } = useCookies();
+    const { clearCookieSettings, setCookieSettings } = useCookies();
     return (
         <div className="container">
             <h1>Freshheads Cookie Guard</h1>
@@ -25,16 +26,20 @@ function App() {
                 voluptates. Delectus ipsa ipsum itaque iusto laudantium, minus
                 nisi numquam pariatur rerum similique temporibus.
             </p>
-            <button onClick={() => clearCookies()}>clearCookies</button>
+            <button onClick={() => clearCookieSettings()}>clearCookies</button>
             <CookieBanner {...cookieProps} />
 
             <NeedsCookie
-                cookieRequirement="marketing"
+                cookieRequirement={CookieCategory.marketing}
                 fallback={
                     <div>
                         je mag dit alleen zien als je marketing cookies hebt
                         geaccepteerd.{' '}
-                        <button onClick={() => setCookies({ marketing: true })}>
+                        <button
+                            onClick={() =>
+                                setCookieSettings({ marketing: true })
+                            }
+                        >
                             accepteer marketing cookies
                         </button>
                     </div>

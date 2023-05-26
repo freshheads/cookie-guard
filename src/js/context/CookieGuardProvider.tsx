@@ -8,41 +8,41 @@ export const cookieName = 'cookies_consent';
 
 export type CookieGuardsContextProviderProps = {
     children: ReactNode;
-    onCookiesChange?: (cookies: CookieCategorySettings) => void;
-    onCookiesSet?: (cookies: CookieCategorySettings) => void;
-    onCookiesCleared?: () => void;
+    onCookieSettingsChange?: (cookieSettings: CookieCategorySettings) => void;
+    onCookieSettingsSet?: (cookieSettings: CookieCategorySettings) => void;
+    onCookieSettingsCleared?: () => void;
 };
 
 export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
     children,
-    onCookiesChange,
-    onCookiesCleared,
-    onCookiesSet,
+    onCookieSettingsChange,
+    onCookieSettingsCleared,
+    onCookieSettingsSet,
 }) => {
     const currentCookies = Cookies.get(cookieName);
     const initialState = currentCookies
         ? (JSON.parse(currentCookies) as CookieCategorySettings)
         : undefined;
 
-    const [cookies, setCookiesState] =
+    const [cookieSettings, setCookieSettings] =
         useState<CookieCategorySettings>(initialState);
 
     useEffect(() => {
-        onCookiesChange && onCookiesChange(cookies);
-    }, [cookies]);
+        onCookieSettingsChange && onCookieSettingsChange(cookieSettings);
+    }, [cookieSettings]);
 
-    const setCookies = (
-        cookiesChoice: CookieCategorySettings,
+    const onSetCookieSettings = (
+        newCookieSettings: CookieCategorySettings,
         domain?: string,
         subdomains?: string[]
     ) => {
-        if (!cookiesChoice) return;
-        if (Object.keys(cookiesChoice).length === 0) return;
+        if (!newCookieSettings) return;
+        if (Object.keys(newCookieSettings).length === 0) return;
 
         const cookiesToSet = {
-            ...cookies,
+            ...cookieSettings,
+            ...newCookieSettings,
             required: true,
-            ...cookiesChoice,
         };
 
         setBrowserCookies(
@@ -53,24 +53,24 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
             domain
         );
 
-        setCookiesState(cookiesToSet);
-        onCookiesSet && onCookiesSet(cookiesToSet);
+        setCookieSettings(cookiesToSet);
+        onCookieSettingsSet && onCookieSettingsSet(cookiesToSet);
     };
 
-    const clearCookies = () => {
+    const clearCookieSettings = () => {
         if (typeof document === 'undefined') return;
-        setCookiesState(undefined);
+        setCookieSettings(undefined);
         Cookies.remove(cookieName);
         // cookies in state is not updated immediately, so we need to pass undefined
-        onCookiesCleared && onCookiesCleared();
+        onCookieSettingsCleared && onCookieSettingsCleared();
     };
 
     return (
         <CookieGuardContext.Provider
             value={{
-                cookies: cookies,
-                setCookies: setCookies,
-                clearCookies: clearCookies,
+                cookieSettings: cookieSettings,
+                setCookieSettings: onSetCookieSettings,
+                clearCookieSettings: clearCookieSettings,
             }}
         >
             {children}

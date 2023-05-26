@@ -25,15 +25,21 @@ export const CookieBanner: FC<CookieBannerProps> = ({
     analyticsLabel,
     marketingLabel,
 }) => {
-    const { cookies, setCookies } = useCookies();
-    const [isOpen, setIsOpen] = useState(cookies === undefined);
+    const { cookieSettings, setCookieSettings } = useCookies();
+    const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
 
-    const [analytics, setAnalytics] = useState(cookies?.analytics ?? false);
-    const [marketing, setMarketing] = useState(cookies?.marketing ?? false);
-    const [functional, setFunctional] = useState(cookies?.functional ?? false);
+    const [analytics, setAnalytics] = useState(
+        cookieSettings?.analytics ?? false
+    );
+    const [marketing, setMarketing] = useState(
+        cookieSettings?.marketing ?? false
+    );
+    const [functional, setFunctional] = useState(
+        cookieSettings?.functional ?? false
+    );
 
-    const onSetCookies = (cookiesToset: CookieCategorySettings) => {
-        setCookies(cookiesToset);
+    const onSetCookies = (cookieSettings: CookieCategorySettings) => {
+        setCookieSettings(cookieSettings);
         setIsOpen(false);
     };
 

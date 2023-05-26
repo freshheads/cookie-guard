@@ -1,16 +1,16 @@
 import { createContext } from 'react';
-import { CookieOptions } from '../types/cookies';
+import { CookieCategorySettings } from '../types/cookies';
 
 export const CookieGuardContext = createContext<{
-    cookies: CookieOptions | undefined;
-    setCookies: (
-        cookies: Partial<CookieOptions>,
+    cookieSettings: CookieCategorySettings;
+    setCookieSettings: (
+        cookieSettings: CookieCategorySettings,
         domain?: string,
         subdomains?: string[]
     ) => void;
-    clearCookies: () => void;
+    clearCookieSettings: () => void;
 }>({
-    cookies: undefined,
-    setCookies: () => {},
-    clearCookies: () => {},
+    cookieSettings: undefined,
+    setCookieSettings: () => {},
+    clearCookieSettings: () => {},
 });
