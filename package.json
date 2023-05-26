@@ -37,11 +37,15 @@
         "url": "https://github.com/freshheads/cookie-guard/issues"
     },
     "devDependencies": {
+        "@chakra-ui/react": "^2.6.1",
+        "@emotion/react": "^11.11.0",
+        "@emotion/styled": "^11.11.0",
         "@types/js-cookie": "^3.0.3",
         "@types/node": "^18.16.2",
         "@types/react": "^18.0.31",
         "@types/react-dom": "^18.0.11",
         "@vitejs/plugin-react": "^4.0.0",
+        "framer-motion": "^10.12.16",
         "path": "^0.12.7",
         "postcss-nesting": "^11.2.2",
         "prettier": "^2.8.7",

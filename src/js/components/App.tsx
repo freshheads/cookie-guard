@@ -2,6 +2,7 @@ import { CookieBanner, CookieBannerProps } from './CookieBanner';
 import { useCookies } from '../hooks/useCookies';
 import { NeedsCookie } from './NeedsCookies';
 import { CookieCategory } from '../types/cookies';
+import { BottomBanner } from './examples/BottomBanner';
 
 const cookieProps: CookieBannerProps = {
     title: 'Onze site maakt gebruik van cookies.',
@@ -27,7 +28,7 @@ function App() {
                 nisi numquam pariatur rerum similique temporibus.
             </p>
             <button onClick={() => clearCookieSettings()}>clearCookies</button>
-            <CookieBanner {...cookieProps} />
+            <BottomBanner />
 
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
