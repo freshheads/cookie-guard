@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import { CookieOptions } from '../types/cookies';
 
 //set cookies function
 export const setCookies = (
@@ -27,13 +26,4 @@ export const setCookies = (
             expires: durationInDays,
         });
     }
-};
-
-export const cookieOptionsToArray = (cookieOptions: CookieOptions) => {
-    const { analytics, marketing, functional } = cookieOptions;
-    let cookieValue = [];
-    if (functional) cookieValue.push('functional');
-    if (analytics) cookieValue.push('analytics');
-    if (marketing) cookieValue.push('marketing');
-    return cookieValue;
 };

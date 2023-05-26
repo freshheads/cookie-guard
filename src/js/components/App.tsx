@@ -1,14 +1,15 @@
-import { CookieGuard, CookieGuardProps } from './CookieGuard';
+import { CookieBanner, CookieBannerProps } from './CookieBanner';
 import { useCookies } from '../hooks/useCookies';
 import { NeedsCookie } from './NeedsCookies';
 
-const cookieProps: CookieGuardProps = {
+const cookieProps: CookieBannerProps = {
     title: 'Onze site maakt gebruik van cookies.',
     description:
         'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
     acceptAllLabel: 'Alle cookies accepteren',
     saveLabel: 'Opslaan',
-    functionalLabel: 'Noodzakelijke cookies',
+    requiredLabel: 'Noodzakelijke cookies',
+    functionalLabel: 'Functionele cookies',
     analyticsLabel: 'Analytische cookies',
     marketingLabel: 'Marketing cookies',
 };
@@ -25,7 +26,7 @@ function App() {
                 nisi numquam pariatur rerum similique temporibus.
             </p>
             <button onClick={() => clearCookies()}>clearCookies</button>
-            <CookieGuard {...cookieProps} />
+            <CookieBanner {...cookieProps} />
 
             <NeedsCookie
                 cookieRequirement="marketing"
@@ -42,7 +43,7 @@ function App() {
                 <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube-nocookie.com/embed/UYwV_Np4Asw"
+                    src="https://www.youtube-nocookie.com/embed/2_x0LYeGNeM"
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

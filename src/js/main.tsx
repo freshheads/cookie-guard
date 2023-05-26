@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
-import { CookieGuardContextProvider } from './context/CookieGuardContextProvider';
+import { CookieGuardProvider } from './context/CookieGuardProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <CookieGuardContextProvider
+        <CookieGuardProvider
             onCookiesChange={(cookies) =>
                 console.log('cookies changed', cookies)
             }
@@ -13,6 +13,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             onCookiesSet={(cookies) => console.log('cookies set', cookies)}
         >
             <App />
-        </CookieGuardContextProvider>
+        </CookieGuardProvider>
     </React.StrictMode>
 );

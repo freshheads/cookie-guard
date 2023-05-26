@@ -2,22 +2,25 @@ import { FC, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { useCookies } from '../hooks/useCookies';
 import { Checkbox } from './Checkbox';
+import { CookieCategorySettings } from '../types/cookies';
 
-export type CookieGuardProps = {
+export type CookieBannerProps = {
     title: string;
     description: JSX.Element | string;
     acceptAllLabel: string;
     saveLabel: string;
+    requiredLabel: string;
     functionalLabel: string;
     analyticsLabel: string;
     marketingLabel: string;
 };
 
-export const CookieGuard: FC<CookieGuardProps> = ({
+export const CookieBanner: FC<CookieBannerProps> = ({
     title,
     description,
     acceptAllLabel,
     saveLabel,
+    requiredLabel,
     functionalLabel,
     analyticsLabel,
     marketingLabel,
@@ -27,31 +30,35 @@ export const CookieGuard: FC<CookieGuardProps> = ({
 
     const [analytics, setAnalytics] = useState(cookies?.analytics ?? false);
     const [marketing, setMarketing] = useState(cookies?.marketing ?? false);
+    const [functional, setFunctional] = useState(cookies?.functional ?? false);
 
-    const onSetCookies = (cookies: {
-        analytics: boolean;
-        marketing: boolean;
-    }) => {
-        setCookies(cookies);
+    const onSetCookies = (cookiesToset: CookieCategorySettings) => {
+        setCookies(cookiesToset);
         setIsOpen(false);
     };
 
     return (
-        <Dialog open={isOpen} onClose={() => {}} className="cookieguard">
-            <div className="cookieguard__backdrop" aria-hidden="true" />
-            <div className="cookieguard__scroll-container" aria-hidden="true">
-                <div className="cookieguard__container">
-                    <div className="cookieguard__content">
+        <Dialog open={isOpen} onClose={() => {}} className="cookiebanner">
+            <div className="cookiebanner__backdrop" aria-hidden="true" />
+            <div className="cookiebanner__scroll-container" aria-hidden="true">
+                <div className="cookiebanner__container">
+                    <div className="cookiebanner__content">
                         <Dialog.Title as="h2">{title}</Dialog.Title>
                         <Dialog.Description as="div">
                             {description}
                         </Dialog.Description>
-                        <div className="cookieguard__options">
+                        <div className="cookiebanner__options">
+                            <Checkbox
+                                label={requiredLabel}
+                                name="required"
+                                value={true}
+                                disabled
+                            />
                             <Checkbox
                                 label={functionalLabel}
                                 name="functional"
-                                value={true}
-                                disabled={true}
+                                value={functional}
+                                onChange={() => setFunctional(!functional)}
                             />
                             <Checkbox
                                 label={analyticsLabel}
@@ -67,11 +74,12 @@ export const CookieGuard: FC<CookieGuardProps> = ({
                                 onChange={() => setMarketing(!marketing)}
                             />
                         </div>
-                        <div className="cookieguard__button-container">
+                        <div className="cookiebanner__button-container">
                             <button
-                                className="cookieguard__button cookieguard__save-button"
+                                className="cookiebanner__button cookiebanner__save-button"
                                 onClick={() =>
                                     onSetCookies({
+                                        functional,
                                         analytics,
                                         marketing,
                                     })
@@ -80,9 +88,10 @@ export const CookieGuard: FC<CookieGuardProps> = ({
                                 {saveLabel}
                             </button>
                             <button
-                                className="cookieguard__button cookieguard__button--primary cookieguard__accept-all-button"
+                                className="cookiebanner__button cookiebanner__button--primary cookiebanner__accept-all-button"
                                 onClick={() =>
                                     onSetCookies({
+                                        functional: true,
                                         analytics: true,
                                         marketing: true,
                                     })

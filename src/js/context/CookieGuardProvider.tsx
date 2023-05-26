@@ -1,56 +1,53 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import {
-    cookieOptionsToArray,
-    setCookies as setBrowserCookies,
-} from '../util/cookieFunctions';
+import { setCookies as setBrowserCookies } from '../util/cookieFunctions';
 import { CookieGuardContext } from './CookieGuardContext';
-import { CookieOptions } from '../types/cookies';
 import Cookies from 'js-cookie';
+import { CookieCategorySettings } from '../types/cookies';
 
 export const cookieName = 'cookies_consent';
 
 export type CookieGuardsContextProviderProps = {
     children: ReactNode;
-    onCookiesChange?: (cookies: CookieOptions | undefined) => void;
-    onCookiesSet?: (cookies: CookieOptions) => void;
+    onCookiesChange?: (cookies: CookieCategorySettings) => void;
+    onCookiesSet?: (cookies: CookieCategorySettings) => void;
     onCookiesCleared?: () => void;
 };
 
-export const CookieGuardContextProvider: FC<
-    CookieGuardsContextProviderProps
-> = ({ children, onCookiesChange, onCookiesCleared, onCookiesSet }) => {
+export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
+    children,
+    onCookiesChange,
+    onCookiesCleared,
+    onCookiesSet,
+}) => {
     const currentCookies = Cookies.get(cookieName);
     const initialState = currentCookies
-        ? {
-              functional: JSON.parse(currentCookies).includes('functional'),
-              analytics: JSON.parse(currentCookies).includes('analytics'),
-              marketing: JSON.parse(currentCookies).includes('marketing'),
-          }
+        ? (JSON.parse(currentCookies) as CookieCategorySettings)
         : undefined;
 
-    const [cookies, setCookiesState] = useState(initialState);
+    const [cookies, setCookiesState] =
+        useState<CookieCategorySettings>(initialState);
 
     useEffect(() => {
         onCookiesChange && onCookiesChange(cookies);
     }, [cookies]);
 
     const setCookies = (
-        cookiesChoice: Partial<CookieOptions>,
+        cookiesChoice: CookieCategorySettings,
         domain?: string,
         subdomains?: string[]
     ) => {
-        const { analytics, marketing } = cookiesChoice;
+        if (!cookiesChoice) return;
+        if (Object.keys(cookiesChoice).length === 0) return;
 
         const cookiesToSet = {
             ...cookies,
-            functional: true,
-            analytics: analytics ?? cookies?.analytics ?? false,
-            marketing: marketing ?? cookies?.marketing ?? false,
+            required: true,
+            ...cookiesChoice,
         };
 
         setBrowserCookies(
             cookieName,
-            JSON.stringify(cookieOptionsToArray(cookiesToSet)),
+            JSON.stringify(cookiesToSet),
             7,
             subdomains,
             domain
