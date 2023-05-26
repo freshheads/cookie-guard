@@ -1,33 +1,68 @@
 # FHCookieGuard
 
+A set of hooks to use to save a user's cookie preferences in a cookie(🥲).
+
+The cookie settings are stored as follows:
+
+`'["functional","analytics","marketing"]'`
+
 ## Usage
 
-```js
-import { CookiePopup } from '@freshheads/cookie-guard'
+You can use the build in cookieguard to get up and running quickly or use the provided hooks to make your own.
 
-const App = () => {
-    return (
-        <div>
-            <CookiePopup />
-        </div>
-    );
-};
+The cookiebanner makes use of Context to share the cookie state throughout the app.
+
+-   Wrap your app with the Provider:
+
+    ```jsx
+    import { CookieGuardContextProvider } from '@freshheads/cookie-guard';
+
+    <CookieGuardContextProvider>
+        <App />
+    </CookieGuardContextProvider>;
+    ```
+
+-   The provider optionally accepts:
+
+    -   onCookiesChange
+    -   onCookiesSet
+    -   onCookiesCleared
+
+    e.g. If you want to change the Google consent options based on the cookie settings
+
+-   Add the premade Cookie Banner to your app
+
+    ```jsx
+    import {
+    CookieGuard,
+    CookieGuardContextProvider,
+    CookieGuardProps
+    } from '@freshheads/cookie-guard';
+    import '@freshheads/cookie-guard/dist/style.css';
+
+    const CookieGuardProps = {
+        title: 'Onze site maakt gebruik van cookies.',
+        description:
+            'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
+        acceptAllLabel: 'Alle cookies accepteren',
+        saveLabel: 'Opslaan',
+        functionalLabel: 'Noodzakelijke cookies',
+        analyticsLabel: 'Analytische cookies',
+        marketingLabel: 'Marketing cookies',
+    }
+     <CookieGuardContextProvider>
+        <App/>
+        <CookieGuard {...CookieGuardProps}>
+    </CookieGuardContextProvider>
+
+    ```
+
+-   To style look at the source code `/src/popupstyles.css` and import your own css.
+
+-   You can also use the hooks to make your own custom cookiebanner
+
+TODO: explain hooks with chakraui example
+
+```jsx
+
 ```
-
-We provide some basic styles but you can also use your own.
-Import them as global css.
-```css
-@import '@freshheads/cookie-guard/dist/style.css';
-```
-
-
-TODO: Documentation below needs to be changed
-## Documentation
-
-- [Installation](doc/installation.md)
-- [Usage](doc/usage.md)
-- [Configuration](doc/configuration.md)
-
-## Browser support
-
-This library supports the latest 2 versions of all modern browsers. But support can be extended by converting code to ES5 and using some polyfills.

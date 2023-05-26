@@ -1,5 +1,9 @@
-import CookiePopup from './components/CookiePopup';
+import { CookieBanner, CookieBannerProps } from './components/CookieBanner';
+import { useCookies } from './hooks/useCookies';
+import { CookieGuardContext } from './context/CookieGuardContext';
+import { CookieGuardProvider } from './context/CookieGuardProvider';
 
-export {
-    CookiePopup,
-}
+import { CookieCategorySettings } from './types/cookies';
+
+export type { CookieBannerProps, CookieCategorySettings };
+export { CookieBanner, useCookies, CookieGuardContext, CookieGuardProvider };

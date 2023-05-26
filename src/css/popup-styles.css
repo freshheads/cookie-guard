@@ -1,41 +1,140 @@
-/* @todo basic styling, needs rework. */
 :root {
-    --cookie-alert-bg-color: #fff;
-    --cookie-alert-title-font-size: 2rem;
-    --cookie-alert-zindex: 99999;
+    --cookie-guard-zindex: 99999;
+    --cookie-guard-backdrop-color: rgba(0, 0, 0, 0.7);
+    --cookie-guard-background-color: #fff;
+    --cookie-guard-button-color: #fff;
+    --cookie-guard-button-background-color: #000;
+    --cookie-guard-button-hover-color: #fff;
+    --cookie-guard-button-hover-background-color: #777;
+    --cookie-guard-button-border-radius: 16px;
+    --cookie-guard-button-primary-color: #fff;
+    --cookie-guard-button-primary-background-color: #1051ac;
+    --cookie-guard-button-hover-primary-background-color: #0b326a;
+    --cookie-guard-button-hover-primary-color: #fff;
 }
 
-.cookie-alert {
+.cookiebanner {
+    position: relative;
+    z-index: var(--cookie-guard-zindex);
+}
+
+.cookiebanner__backdrop {
     position: fixed;
-    z-index: var(--cookie-alert-zindex);
     top: 0;
     left: 0;
-    width: 500px;
-    max-width: 90vw;
-    margin: auto;
-    overflow-y: auto;
-    transform: translateY(0);
-    background-color: var(--cookie-alert-bg-color);
-    inset: 0;
-    transition: opacity 0.4s ease, transform 0s 0.4s;
+    right: 0;
+    bottom: 0;
+    background-color: var(--cookie-guard-backdrop-color);
+}
+.cookiebanner__scroll-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: scroll;
+    min-height: 100%;
+}
+.cookiebanner__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+.cookiebanner__content {
+    background-color: var(--cookie-guard-background-color);
+    padding: 48px;
+    width: 48rem;
+    max-width: 100%;
+}
 
-    &::backdrop {
-        backdrop-filter: blur(2px);
-        background-color: rgb(0 0 0 / 20%);
-    }
+.cookiebanner__before-options {
+    margin: 16px 0;
+}
 
-    &:not([open]) {
-        pointer-events: none;
-        opacity: 0;
-        transform: translateY(-100%);
-        transition: opacity 0.4s ease, transform 0s 0s;
+.cookiebanner__options {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+}
+
+.cookiebanner__checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.cookiebanner__checkbox {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.cookiebanner__button-container {
+    margin-top: 16px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+    .cookiebanner__button-container {
+        grid-template-columns: 1fr;
     }
 }
 
-.cookie-alert__title {
-    font-size: var(--cookie-alert-title-font-size);
+.cookiebanner__button {
+    display: inline-flex;
+    appearance: none;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    position: relative;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: none;
+    line-height: 1.2;
+    border-radius: var(--cookie-guard-button-border-radius);
+    font-weight: bold;
+    padding: 8px 16px;
+    background: var(--cookie-guard-button-background-color);
+    color: var(--cookie-guard-button-color);
+    cursor: pointer;
+    &:hover {
+        background: var(--cookie-guard-button-hover-background-color);
+        color: var(--cookie-guard-button-hover-color);
+    }
+
+    &:focus {
+        outline: var(--cookie-guard-button-background-color) solid 2px;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        background: var(--cookie-guard-button-hover-background-color);
+        color: var(--cookie-guard-button-hover-color);
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
-.cookie-alert__description {
-    margin: 0 0 2rem;
+.cookiebanner__button--primary {
+    background: var(--cookie-guard-button-primary-background-color);
+    color: var(--cookie-guard-button-primary-color);
+
+    &:hover {
+        background: var(--cookie-guard-button-hover-primary-background-color);
+        color: var(--cookie-guard-button-hover-primary-color);
+    }
+
+    &:focus {
+        outline: var(--cookie-guard-button-primary-background-color) solid 2px;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        background: var(--cookie-guard-button-hover-primary-background-color);
+        color: var(--cookie-guard-button-hover-primary-color);
+    }
 }
