@@ -19,10 +19,11 @@ import {
     Icon,
     Box,
     Stack,
+    Heading,
 } from '@chakra-ui/react';
 import { FaCookieBite } from 'react-icons/fa';
 
-export const BottomBanner: FC = () => {
+export const CenteredBanner: FC = () => {
     const { cookieSettings, setCookieSettings } = useCookies();
     const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
 
@@ -57,52 +58,33 @@ export const BottomBanner: FC = () => {
     };
 
     return (
-        <Modal
-            isOpen={isOpen}
-            onClose={() => {}}
-            isCentered={false}
-            autoFocus={false}
-        >
+        <Modal isOpen={isOpen} onClose={() => {}} isCentered>
             <ModalOverlay />
-            <ModalContent
-                color="white"
-                borderRadius="xl"
-                maxWidth="3xl"
-                containerProps={{
-                    alignItems: 'flex-end',
-                }}
-                bgColor="#003459"
-                p={4}
-                m={2}
-            >
+            <ModalContent borderRadius="xl" maxWidth="3xl" p={8}>
                 <ModalBody>
                     <Flex
                         direction={{ base: 'column', md: 'row' }}
                         gap={{ base: 0, md: 6 }}
                     >
-                        <Flex>
-                            <Icon
-                                display={{ base: 'none', md: 'block' }}
-                                as={FaCookieBite}
-                                w={12}
-                                h={12}
-                                mr={6}
-                                color="#1293FA"
-                            />
-                            <Box
-                                maxW="sm"
-                                mb={2}
-                                fontSize={{ base: 'sm', md: 'md' }}
-                            >
-                                <Text mb={2}>
-                                    Onze site gebruikt cookies om jou de beste
-                                    ervaring te geven op onze website.
-                                </Text>
-                                <Link href="#" fontWeight={600}>
-                                    Meer info
-                                </Link>
-                            </Box>
-                        </Flex>
+                        <Heading size="xl">
+                            Onze site maakt gebruik van cookies
+                        </Heading>
+                        <Box
+                            maxW="sm"
+                            mb={2}
+                            fontSize={{ base: 'sm', md: 'md' }}
+                        >
+                            <Text mb={2}>
+                                We maken gebruiken van cookies om content en
+                                advertenties te personaliseren, om functies voor
+                                social media te bieden en om ons websiteverkeer
+                                te analyseren.
+                            </Text>
+                            <Link href="#" fontWeight={600}>
+                                Meer informatie
+                            </Link>
+                        </Box>
+
                         <Stack
                             direction={{ base: 'column', sm: 'row' }}
                             align={{ base: 'flex-start', sm: 'center' }}

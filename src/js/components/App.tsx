@@ -3,6 +3,10 @@ import { useCookies } from '../hooks/useCookies';
 import { NeedsCookie } from './NeedsCookies';
 import { CookieCategory } from '../types/cookies';
 import { BottomBanner } from './examples/BottomBanner';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { CornerBanner } from './examples/CornerBanner';
+import { WideBottomBanner } from './examples/WideBottomBanner';
+import { CenteredBanner } from './examples/CenteredBanner';
 
 const cookieProps: CookieBannerProps = {
     title: 'Onze site maakt gebruik van cookies.',
@@ -28,7 +32,15 @@ function App() {
                 nisi numquam pariatur rerum similique temporibus.
             </p>
             <button onClick={() => clearCookieSettings()}>clearCookies</button>
-            <BottomBanner />
+            <Routes>
+                <Route path="/bottom-banner" element={<BottomBanner />} />
+                <Route path="/corner-banner" element={<CornerBanner />} />
+                <Route
+                    path="/wide-bottom-banner"
+                    element={<WideBottomBanner />}
+                />
+                <Route path="/centered-banner" element={<CenteredBanner />} />
+            </Routes>
 
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
