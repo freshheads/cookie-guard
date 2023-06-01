@@ -1,6 +1,6 @@
 {
     "name": "@freshheads/cookie-guard",
-    "version": "4.0.0-alpha.3",
+    "version": "4.0.0-alpha.4",
     "description": "Let user manage cookie usage",
     "scripts": {
         "dev": "vite",
