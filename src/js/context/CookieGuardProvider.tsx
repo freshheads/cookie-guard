@@ -24,6 +24,10 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
         ? (JSON.parse(currentCookies) as CookieCategorySettings)
         : undefined;
 
+    const [cookiebannerIsOpen, setCookieBannerIsOpen] = useState<boolean>(
+        currentCookies ? false : true
+    );
+
     const [cookieSettings, setCookieSettings] =
         useState<CookieCategorySettings>(initialState);
 
@@ -71,6 +75,8 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
                 cookieSettings: cookieSettings,
                 setCookieSettings: onSetCookieSettings,
                 clearCookieSettings: clearCookieSettings,
+                cookieBannerIsOpen: cookiebannerIsOpen,
+                setCookieBannerIsOpen: setCookieBannerIsOpen,
             }}
         >
             {children}

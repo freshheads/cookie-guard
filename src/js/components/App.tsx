@@ -16,7 +16,8 @@ const cookieProps: CookieBannerProps = {
 };
 
 function App() {
-    const { clearCookieSettings, setCookieSettings } = useCookies();
+    const { clearCookieSettings, setCookieSettings, setCookieBannerIsOpen } =
+        useCookies();
     return (
         <div className="container">
             <h1>Freshheads Cookie Guard</h1>
@@ -28,7 +29,9 @@ function App() {
             </p>
             <button onClick={() => clearCookieSettings()}>clearCookies</button>
             <CookieBanner {...cookieProps} />
-
+            <button onClick={() => setCookieBannerIsOpen(true)}>
+                Cookies aanpassen
+            </button>
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
                 fallback={
