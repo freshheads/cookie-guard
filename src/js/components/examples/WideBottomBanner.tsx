@@ -1,27 +1,18 @@
-import { FC, useEffect, useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { useCookies } from '../../hooks/useCookies';
-import { CookieCategorySettings } from '../../types/cookies';
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalCloseButton,
-    ModalBody,
-    ModalFooter,
-    Button,
-    Slide,
-    Text,
-    Link,
-    Flex,
-    VStack,
-    Icon,
     Box,
-    Stack,
+    Button,
+    Flex,
     Heading,
+    Link,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalOverlay,
+    Stack,
+    Text,
 } from '@chakra-ui/react';
-import { FaCookieBite } from 'react-icons/fa';
+import { FC, useEffect, useState } from 'react';
+import { useCookies } from '../../hooks/useCookies';
 
 export const WideBottomBanner: FC = () => {
     const { cookieSettings, setCookieSettings } = useCookies();
