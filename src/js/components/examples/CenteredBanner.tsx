@@ -60,20 +60,18 @@ export const CenteredBanner: FC = () => {
     return (
         <Modal isOpen={isOpen} onClose={() => {}} isCentered>
             <ModalOverlay />
-            <ModalContent borderRadius="xl" maxWidth="3xl" p={8}>
+            <ModalContent
+                borderRadius="none"
+                maxWidth="2xl"
+                px={{ base: 4, md: 8 }}
+                py={{ base: 6, md: 8 }}
+            >
                 <ModalBody>
-                    <Flex
-                        direction={{ base: 'column', md: 'row' }}
-                        gap={{ base: 0, md: 6 }}
-                    >
-                        <Heading size="xl">
+                    <Flex direction="column" gap={{ base: 0, md: 6 }}>
+                        <Heading size="lg" mb={2}>
                             Onze site maakt gebruik van cookies
                         </Heading>
-                        <Box
-                            maxW="sm"
-                            mb={2}
-                            fontSize={{ base: 'sm', md: 'md' }}
-                        >
+                        <Box mb={2} fontSize={{ base: 'sm', md: 'md' }}>
                             <Text mb={2}>
                                 We maken gebruiken van cookies om content en
                                 advertenties te personaliseren, om functies voor
@@ -88,17 +86,17 @@ export const CenteredBanner: FC = () => {
                         <Stack
                             direction={{ base: 'column', sm: 'row' }}
                             align={{ base: 'flex-start', sm: 'center' }}
+                            gap={{ base: 0, sm: 2 }}
                         >
                             <Button
                                 variant="secondary"
-                                border="2px solid #1293FA"
+                                border="2px solid"
                                 borderRadius="full"
-                                color="#1293FA"
-                                mr={2}
                                 onClick={() => {
                                     setIsOpen(false);
                                 }}
-                                size={{ base: 'sm', md: 'md' }}
+                                size={{ base: 'md', md: 'lg' }}
+                                width={{ base: 'full', sm: 'auto' }}
                             >
                                 Weigeren
                             </Button>
@@ -108,7 +106,8 @@ export const CenteredBanner: FC = () => {
                                 bgColor="#1293FA"
                                 borderRadius="full"
                                 color="white"
-                                size={{ base: 'sm', md: 'md' }}
+                                size={{ base: 'md', md: 'lg' }}
+                                width={{ base: 'full', sm: 'auto' }}
                             >
                                 Accepteren
                             </Button>

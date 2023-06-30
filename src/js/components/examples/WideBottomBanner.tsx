@@ -75,7 +75,7 @@ export const WideBottomBanner: FC = () => {
                 display="flex"
                 justifyContent="center"
                 bgColor="#003459"
-                p={4}
+                p={8}
                 m={0}
             >
                 <Flex justifyContent="center">
