@@ -94,7 +94,7 @@ export const WideBottomBanner: FC = () => {
                                 </Box>
                             </Flex>
                             <Stack direction={{ base: 'column', sm: 'row' }}>
-                                <Button
+                                {/* <Button
                                     variant="secondary"
                                     border="2px solid #1293FA"
                                     borderRadius="full"
@@ -106,7 +106,19 @@ export const WideBottomBanner: FC = () => {
                                     size={{ base: 'sm', md: 'md' }}
                                 >
                                     Weigeren
-                                </Button>
+                                </Button> */}
+                                <Text
+                                    as="u"
+                                    mt="2"
+                                    mr="2"
+                                    opacity="0.6"
+                                    cursor="pointer"
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    Voorkeuren
+                                </Text>
                                 <Button
                                     variant="primary"
                                     onClick={onAccept}

@@ -7,18 +7,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { CornerBanner } from './examples/CornerBanner';
 import { WideBottomBanner } from './examples/WideBottomBanner';
 import { CenteredBanner } from './examples/CenteredBanner';
-
-const cookieProps: CookieBannerProps = {
-    title: 'Onze site maakt gebruik van cookies.',
-    description:
-        'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
-    acceptAllLabel: 'Alle cookies accepteren',
-    saveLabel: 'Opslaan',
-    requiredLabel: 'Noodzakelijke cookies',
-    functionalLabel: 'Functionele cookies',
-    analyticsLabel: 'Analytische cookies',
-    marketingLabel: 'Marketing cookies',
-};
+import { PrivacyPreferences } from './PrivacyPreferences';
 
 function App() {
     const { clearCookieSettings, setCookieSettings } = useCookies();
@@ -41,6 +30,7 @@ function App() {
                 />
                 <Route path="/centered-banner" element={<CenteredBanner />} />
             </Routes>
+            <PrivacyPreferences />
 
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
