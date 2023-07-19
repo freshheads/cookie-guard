@@ -9,7 +9,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             onCookieSettingsChange={(cookieSettings) =>
                 console.log('cookies changed', cookieSettings)
             }
-            onCookieSettingsCleared={() => console.log('cookies cleared')}
             onCookieSettingsSet={(cookieSettings) =>
                 console.log('cookies set', cookieSettings)
             }
