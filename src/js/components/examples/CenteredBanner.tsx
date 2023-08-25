@@ -21,11 +21,13 @@ import {
     Stack,
     Heading,
 } from '@chakra-ui/react';
-import { FaCookieBite } from 'react-icons/fa';
+import { PrivacyPreferences } from '../PrivacyPreferences';
 
 export const CenteredBanner: FC = () => {
     const { cookieSettings, setCookieSettings } = useCookies();
     const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
+    const [privacyPreferencesIsOpen, setPrivacyPreferencesIsOpen] =
+        useState(false);
 
     const [cookieOptions, setCookieOptions] = useState<{
         required: boolean;
@@ -47,14 +49,31 @@ export const CenteredBanner: FC = () => {
         });
     }, [cookieSettings]);
 
-    const onAccept = () => {
+    const onAcceptAll = () => {
         setCookieSettings({
             functional: true,
             analytics: true,
             marketing: true,
         });
         setIsOpen(false);
-        // setCookieBannerIsOpen(false);
+    };
+
+    const onDenyAll = () => {
+        setCookieSettings({
+            functional: true,
+            analytics: false,
+            marketing: false,
+        });
+        setIsOpen(false);
+    };
+
+    const openPrivacyPreferences = () => {
+        setPrivacyPreferencesIsOpen(true);
+    };
+
+    const closePrivacyPreferences = () => {
+        setPrivacyPreferencesIsOpen(false);
+        setIsOpen(false);
     };
 
     return (
@@ -78,8 +97,11 @@ export const CenteredBanner: FC = () => {
                                 social media te bieden en om ons websiteverkeer
                                 te analyseren.
                             </Text>
-                            <Link href="#" fontWeight={600}>
-                                Meer informatie
+                            <Link
+                                onClick={openPrivacyPreferences}
+                                fontWeight={600}
+                            >
+                                Voorkeuren
                             </Link>
                         </Box>
 
@@ -92,9 +114,7 @@ export const CenteredBanner: FC = () => {
                                 variant="secondary"
                                 border="2px solid"
                                 borderRadius="full"
-                                onClick={() => {
-                                    setIsOpen(false);
-                                }}
+                                onClick={onDenyAll}
                                 size={{ base: 'md', md: 'lg' }}
                                 width={{ base: 'full', sm: 'auto' }}
                             >
@@ -102,7 +122,7 @@ export const CenteredBanner: FC = () => {
                             </Button>
                             <Button
                                 variant="primary"
-                                onClick={onAccept}
+                                onClick={onAcceptAll}
                                 bgColor="#1293FA"
                                 borderRadius="full"
                                 color="white"
@@ -112,6 +132,13 @@ export const CenteredBanner: FC = () => {
                                 Accepteren
                             </Button>
                         </Stack>
+                        <PrivacyPreferences
+                            isOpen={privacyPreferencesIsOpen}
+                            setIsOpen={setPrivacyPreferencesIsOpen}
+                            onAcceptAll={onAcceptAll}
+                            onDenyAll={onDenyAll}
+                            closePrivacyPreferences={closePrivacyPreferences}
+                        />
                     </Flex>
                 </ModalBody>
             </ModalContent>

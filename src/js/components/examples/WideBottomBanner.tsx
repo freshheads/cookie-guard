@@ -13,10 +13,13 @@ import {
 } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useCookies } from '../../hooks/useCookies';
+import { PrivacyPreferences } from '../PrivacyPreferences';
 
 export const WideBottomBanner: FC = () => {
     const { cookieSettings, setCookieSettings } = useCookies();
     const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
+    const [privacyPreferencesIsOpen, setPrivacyPreferencesIsOpen] =
+        useState(false);
 
     const [cookieOptions, setCookieOptions] = useState<{
         required: boolean;
@@ -38,16 +41,32 @@ export const WideBottomBanner: FC = () => {
         });
     }, [cookieSettings]);
 
-    const onAccept = () => {
+    const onAcceptAll = () => {
         setCookieSettings({
             functional: true,
             analytics: true,
             marketing: true,
         });
         setIsOpen(false);
-        // setCookieBannerIsOpen(false);
     };
 
+    const onDenyAll = () => {
+        setCookieSettings({
+            functional: true,
+            analytics: false,
+            marketing: false,
+        });
+        setIsOpen(false);
+    };
+
+    const openPrivacyPreferences = () => {
+        setPrivacyPreferencesIsOpen(true);
+    };
+
+    const closePrivacyPreferences = () => {
+        setPrivacyPreferencesIsOpen(false);
+        setIsOpen(false);
+    };
     return (
         <Modal
             isOpen={isOpen}
@@ -94,19 +113,6 @@ export const WideBottomBanner: FC = () => {
                                 </Box>
                             </Flex>
                             <Stack direction={{ base: 'column', sm: 'row' }}>
-                                {/* <Button
-                                    variant="secondary"
-                                    border="2px solid #1293FA"
-                                    borderRadius="full"
-                                    color="#1293FA"
-                                    mr={2}
-                                    onClick={() => {
-                                        setIsOpen(false);
-                                    }}
-                                    size={{ base: 'sm', md: 'md' }}
-                                >
-                                    Weigeren
-                                </Button> */}
                                 <Text
                                     as="u"
                                     mt="2"
@@ -114,14 +120,28 @@ export const WideBottomBanner: FC = () => {
                                     opacity="0.6"
                                     cursor="pointer"
                                     onClick={() => {
-                                        setIsOpen(false);
+                                        openPrivacyPreferences();
                                     }}
                                 >
                                     Voorkeuren
                                 </Text>
                                 <Button
+                                    variant="secondary"
+                                    border="2px solid #1293FA"
+                                    borderRadius="full"
+                                    color="#1293FA"
+                                    mr={2}
+                                    onClick={() => {
+                                        onDenyAll();
+                                    }}
+                                    size={{ base: 'sm', md: 'md' }}
+                                >
+                                    Weigeren
+                                </Button>
+
+                                <Button
                                     variant="primary"
-                                    onClick={onAccept}
+                                    onClick={onAcceptAll}
                                     bgColor="#1293FA"
                                     borderRadius="full"
                                     color="white"
@@ -131,6 +151,13 @@ export const WideBottomBanner: FC = () => {
                                 </Button>
                             </Stack>
                         </Flex>
+                        <PrivacyPreferences
+                            isOpen={privacyPreferencesIsOpen}
+                            setIsOpen={setPrivacyPreferencesIsOpen}
+                            onAcceptAll={onAcceptAll}
+                            onDenyAll={onDenyAll}
+                            closePrivacyPreferences={closePrivacyPreferences}
+                        />
                     </ModalBody>
                 </Flex>
             </ModalContent>

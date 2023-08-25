@@ -13,19 +13,27 @@ import {
     Stack,
     Switch,
     Text,
-    useDisclosure,
     VStack,
 } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useCookies } from '../hooks/useCookies';
 
 type Props = {
-    onClose: () => void;
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+    onAcceptAll: () => void;
+    onDenyAll: () => void;
+    closePrivacyPreferences: () => void;
 };
 
-export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
+export const PrivacyPreferences: FC<Props> = ({
+    isOpen,
+    setIsOpen,
+    onAcceptAll,
+    onDenyAll,
+    closePrivacyPreferences,
+}) => {
     const { cookieSettings, setCookieSettings } = useCookies();
-    const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
 
     const initialRef = useRef(null);
 
@@ -40,39 +48,22 @@ export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
         analytics: cookieSettings?.analytics ?? false,
         marketing: cookieSettings?.marketing ?? false,
     });
+
+    const handleToggleChange = (key: keyof typeof cookieOptions) => {
+        setCookieOptions((prevState) => ({
+            ...prevState,
+            [key]: !prevState[key],
+        }));
+    };
+
     useEffect(() => {
-        setCookieOptions({
-            required: cookieSettings?.required ?? false,
-            functional: cookieSettings?.functional ?? false,
-            analytics: cookieSettings?.analytics ?? false,
-            marketing: cookieSettings?.marketing ?? false,
-        });
-    }, [cookieSettings]);
-
-    const onAcceptAll = () => {
-        setCookieSettings({
-            functional: true,
-            analytics: true,
-            marketing: true,
-        });
-        setIsOpen(false);
-        // setCookieBannerIsOpen(false);
-    };
-
-    const onDenyAll = () => {
-        setCookieSettings({
-            functional: true,
-            analytics: false,
-            marketing: false,
-        });
-        setIsOpen(false);
-        // setCookieBannerIsOpen(false);
-    };
+        setCookieSettings(cookieOptions);
+    }, [cookieOptions]);
 
     return (
         <Modal
             isOpen={isOpen}
-            onClose={() => {}}
+            onClose={() => setIsOpen(false)}
             isCentered
             initialFocusRef={initialRef}
         >
@@ -84,7 +75,6 @@ export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
                 py={{ base: 6, md: 8 }}
             >
                 <ModalBody>
-                    <ModalCloseButton onClick={onClose} />
                     <Flex direction="column" gap={{ base: 0, md: 4 }}>
                         <Heading size="lg">Privacyvoorkeuren</Heading>
                         <Text mb="xs">
@@ -170,7 +160,14 @@ export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
                                     >
                                         Analytics
                                     </FormLabel>
-                                    <Switch size="lg" id="analytics" />
+                                    <Switch
+                                        size="lg"
+                                        id="analytics"
+                                        isChecked={cookieOptions.analytics}
+                                        onChange={() =>
+                                            handleToggleChange('analytics')
+                                        }
+                                    />
                                 </FormControl>
 
                                 <Text mb={2} maxW="85%">
@@ -194,7 +191,14 @@ export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
                                     >
                                         Marketing
                                     </FormLabel>
-                                    <Switch size="lg" id="marketing" />
+                                    <Switch
+                                        size="lg"
+                                        id="marketing"
+                                        isChecked={cookieOptions.marketing}
+                                        onChange={() =>
+                                            handleToggleChange('marketing')
+                                        }
+                                    />
                                 </FormControl>
 
                                 <Text mb={2} maxW="85%">
@@ -212,7 +216,7 @@ export const PrivacyPreferences: FC<Props> = ({ onClose }) => {
                             <Button
                                 variant="primary"
                                 onClick={() => {
-                                    onAcceptAll();
+                                    closePrivacyPreferences();
                                 }}
                                 bgColor="#1293FA"
                                 borderRadius="full"

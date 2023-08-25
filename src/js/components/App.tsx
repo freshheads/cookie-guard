@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { CornerBanner } from './examples/CornerBanner';
 import { WideBottomBanner } from './examples/WideBottomBanner';
 import { CenteredBanner } from './examples/CenteredBanner';
-import { PrivacyPreferences } from './PrivacyPreferences';
 
 function App() {
     const { clearCookieSettings, setCookieSettings } = useCookies();
@@ -21,16 +20,6 @@ function App() {
                 nisi numquam pariatur rerum similique temporibus.
             </p>
             <button onClick={() => clearCookieSettings()}>clearCookies</button>
-            <Routes>
-                <Route path="/bottom-banner" element={<BottomBanner />} />
-                <Route path="/corner-banner" element={<CornerBanner />} />
-                <Route
-                    path="/wide-bottom-banner"
-                    element={<WideBottomBanner />}
-                />
-                <Route path="/centered-banner" element={<CenteredBanner />} />
-            </Routes>
-            <PrivacyPreferences />
 
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
@@ -58,6 +47,34 @@ function App() {
                     allowFullScreen
                 ></iframe>
             </NeedsCookie>
+
+            <Routes>
+                <Route path="/bottom-banner" element={<BottomBanner />} />
+                <Route path="/corner-banner" element={<CornerBanner />} />
+                <Route
+                    path="/wide-bottom-banner"
+                    element={<WideBottomBanner />}
+                />
+                <Route path="/centered-banner" element={<CenteredBanner />} />
+            </Routes>
+
+            <h2 style={{ marginTop: '24px', fontSize: '24px' }}>
+                Cookie banners
+            </h2>
+            <ul>
+                <li>
+                    <Link to="/bottom-banner">Bottom banner</Link>
+                </li>
+                <li>
+                    <Link to="/corner-banner">Corner banner</Link>
+                </li>
+                <li>
+                    <Link to="/wide-bottom-banner">Wide bottom banner</Link>
+                </li>
+                <li>
+                    <Link to="/centered-banner">Centered banner</Link>
+                </li>
+            </ul>
         </div>
     );
 }
