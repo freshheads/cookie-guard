@@ -9,8 +9,12 @@ export const CookieGuardContext = createContext<{
         subdomains?: string[]
     ) => void;
     clearCookieSettings: () => void;
+    cookieBannerIsOpen: boolean;
+    setCookieBannerIsOpen: (isOpen: boolean) => void;
 }>({
     cookieSettings: undefined,
     setCookieSettings: () => {},
     clearCookieSettings: () => {},
+    cookieBannerIsOpen: false,
+    setCookieBannerIsOpen: () => {},
 });

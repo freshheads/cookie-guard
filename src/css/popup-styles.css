@@ -1,21 +1,21 @@
 :root {
-    --cookie-guard-zindex: 99999;
-    --cookie-guard-backdrop-color: rgba(0, 0, 0, 0.7);
-    --cookie-guard-background-color: #fff;
-    --cookie-guard-button-color: #fff;
-    --cookie-guard-button-background-color: #000;
-    --cookie-guard-button-hover-color: #fff;
-    --cookie-guard-button-hover-background-color: #777;
-    --cookie-guard-button-border-radius: 16px;
-    --cookie-guard-button-primary-color: #fff;
-    --cookie-guard-button-primary-background-color: #1051ac;
-    --cookie-guard-button-hover-primary-background-color: #0b326a;
-    --cookie-guard-button-hover-primary-color: #fff;
+    --cookiebanner-zindex: 99999;
+    --cookiebanner-backdrop-color: rgba(0, 0, 0, 0.7);
+    --cookiebanner-background-color: #fff;
+    --cookiebanner-button-color: #fff;
+    --cookiebanner-button-background-color: #000;
+    --cookiebanner-button-hover-color: #fff;
+    --cookiebanner-button-hover-background-color: #777;
+    --cookiebanner-button-border-radius: 16px;
+    --cookiebanner-button-primary-color: #fff;
+    --cookiebanner-button-primary-background-color: #1051ac;
+    --cookiebanner-button-hover-primary-background-color: #0b326a;
+    --cookiebanner-button-hover-primary-color: #fff;
 }
 
 .cookiebanner {
     position: relative;
-    z-index: var(--cookie-guard-zindex);
+    z-index: var(--cookiebanner-zindex);
 }
 
 .cookiebanner__backdrop {
@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--cookie-guard-backdrop-color);
+    background-color: var(--cookiebanner-backdrop-color);
 }
 .cookiebanner__scroll-container {
     position: fixed;
@@ -42,7 +42,7 @@
     min-height: 100%;
 }
 .cookiebanner__content {
-    background-color: var(--cookie-guard-background-color);
+    background-color: var(--cookiebanner-background-color);
     padding: 48px;
     width: 48rem;
     max-width: 100%;
@@ -93,25 +93,25 @@
     vertical-align: middle;
     border: none;
     line-height: 1.2;
-    border-radius: var(--cookie-guard-button-border-radius);
+    border-radius: var(--cookiebanner-button-border-radius);
     font-weight: bold;
     padding: 8px 16px;
-    background: var(--cookie-guard-button-background-color);
-    color: var(--cookie-guard-button-color);
+    background: var(--cookiebanner-button-background-color);
+    color: var(--cookiebanner-button-color);
     cursor: pointer;
     &:hover {
-        background: var(--cookie-guard-button-hover-background-color);
-        color: var(--cookie-guard-button-hover-color);
+        background: var(--cookiebanner-button-hover-background-color);
+        color: var(--cookiebanner-button-hover-color);
     }
 
     &:focus {
-        outline: var(--cookie-guard-button-background-color) solid 2px;
+        outline: var(--cookiebanner-button-background-color) solid 2px;
         outline-offset: 2px;
     }
 
     &:active {
-        background: var(--cookie-guard-button-hover-background-color);
-        color: var(--cookie-guard-button-hover-color);
+        background: var(--cookiebanner-button-hover-background-color);
+        color: var(--cookiebanner-button-hover-color);
     }
     &:disabled {
         opacity: 0.5;
@@ -120,21 +120,21 @@
 }
 
 .cookiebanner__button--primary {
-    background: var(--cookie-guard-button-primary-background-color);
-    color: var(--cookie-guard-button-primary-color);
+    background: var(--cookiebanner-button-primary-background-color);
+    color: var(--cookiebanner-button-primary-color);
 
     &:hover {
-        background: var(--cookie-guard-button-hover-primary-background-color);
-        color: var(--cookie-guard-button-hover-primary-color);
+        background: var(--cookiebanner-button-hover-primary-background-color);
+        color: var(--cookiebanner-button-hover-primary-color);
     }
 
     &:focus {
-        outline: var(--cookie-guard-button-primary-background-color) solid 2px;
+        outline: var(--cookiebanner-button-primary-background-color) solid 2px;
         outline-offset: 2px;
     }
 
     &:active {
-        background: var(--cookie-guard-button-hover-primary-background-color);
-        color: var(--cookie-guard-button-hover-primary-color);
+        background: var(--cookiebanner-button-hover-primary-background-color);
+        color: var(--cookiebanner-button-hover-primary-color);
     }
 }

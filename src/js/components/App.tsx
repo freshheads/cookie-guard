@@ -9,7 +9,8 @@ import { WideBottomBanner } from './examples/WideBottomBanner';
 import { CenteredBanner } from './examples/CenteredBanner';
 
 function App() {
-    const { clearCookieSettings, setCookieSettings } = useCookies();
+    const { clearCookieSettings, setCookieSettings, setCookieBannerIsOpen } =
+        useCookies();
     return (
         <div className="container">
             <h1>Freshheads Cookie Guard</h1>
@@ -20,7 +21,6 @@ function App() {
                 nisi numquam pariatur rerum similique temporibus.
             </p>
             <button onClick={() => clearCookieSettings()}>clearCookies</button>
-
             <NeedsCookie
                 cookieRequirement={CookieCategory.marketing}
                 fallback={

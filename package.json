@@ -1,6 +1,6 @@
 {
     "name": "@freshheads/cookie-guard",
-    "version": "4.0.0-alpha.2",
+    "version": "4.0.0-alpha.4",
     "description": "Let user manage cookie usage",
     "scripts": {
         "dev": "vite",
@@ -60,8 +60,7 @@
     },
     "dependencies": {
         "@headlessui/react": "^1.7.14",
-        "js-cookie": "^3.0.5",
-        "lodash": "^4.17.21"
+        "js-cookie": "^3.0.5"
     },
     "peerDependencies": {
         "react": ">=17",

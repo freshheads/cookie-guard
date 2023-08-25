@@ -1,8 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { useCookies } from '../hooks/useCookies';
 import { Checkbox } from './Checkbox';
-import { CookieCategorySettings } from '../types/cookies';
 
 export type CookieBannerProps = {
     title: string;
@@ -25,26 +24,52 @@ export const CookieBanner: FC<CookieBannerProps> = ({
     analyticsLabel,
     marketingLabel,
 }) => {
-    const { cookieSettings, setCookieSettings } = useCookies();
-    const [isOpen, setIsOpen] = useState(cookieSettings === undefined);
+    const {
+        cookieSettings,
+        setCookieSettings,
+        cookieBannerIsOpen,
+        setCookieBannerIsOpen,
+    } = useCookies();
+    /*
+        To prevent the cookie banner changing the settings without pressing save,
+        we need to keep track of the options in the banner itself. 
+    */
+    const [cookieOptions, setCookieOptions] = useState<{
+        required: boolean;
+        functional: boolean;
+        analytics: boolean;
+        marketing: boolean;
+    }>({
+        required: cookieSettings?.required ?? false,
+        functional: cookieSettings?.functional ?? false,
+        analytics: cookieSettings?.analytics ?? false,
+        marketing: cookieSettings?.marketing ?? false,
+    });
 
-    const [analytics, setAnalytics] = useState(
-        cookieSettings?.analytics ?? false
-    );
-    const [marketing, setMarketing] = useState(
-        cookieSettings?.marketing ?? false
-    );
-    const [functional, setFunctional] = useState(
-        cookieSettings?.functional ?? false
-    );
+    useEffect(() => {
+        setCookieOptions({
+            required: cookieSettings?.required ?? false,
+            functional: cookieSettings?.functional ?? false,
+            analytics: cookieSettings?.analytics ?? false,
+            marketing: cookieSettings?.marketing ?? false,
+        });
+    }, [cookieSettings]);
 
-    const onSetCookies = (cookieSettings: CookieCategorySettings) => {
-        setCookieSettings(cookieSettings);
-        setIsOpen(false);
+    const onAcceptAll = () => {
+        setCookieSettings({
+            functional: true,
+            analytics: true,
+            marketing: true,
+        });
+        setCookieBannerIsOpen(false);
     };
 
     return (
-        <Dialog open={isOpen} onClose={() => {}} className="cookiebanner">
+        <Dialog
+            open={cookieBannerIsOpen}
+            onClose={() => {}}
+            className="cookiebanner"
+        >
             <div className="cookiebanner__backdrop" aria-hidden="true" />
             <div className="cookiebanner__scroll-container" aria-hidden="true">
                 <div className="cookiebanner__container">
@@ -63,45 +88,51 @@ export const CookieBanner: FC<CookieBannerProps> = ({
                             <Checkbox
                                 label={functionalLabel}
                                 name="functional"
-                                value={functional}
-                                onChange={() => setFunctional(!functional)}
+                                value={cookieOptions?.functional ?? false}
+                                onChange={() =>
+                                    setCookieOptions({
+                                        ...cookieOptions,
+                                        functional: !cookieOptions.functional,
+                                    })
+                                }
                             />
                             <Checkbox
                                 label={analyticsLabel}
                                 name="analytics"
-                                value={analytics}
-                                onChange={() => setAnalytics(!analytics)}
+                                value={cookieOptions.analytics ?? false}
+                                onChange={() =>
+                                    setCookieOptions({
+                                        ...cookieOptions,
+                                        analytics: !cookieOptions.analytics,
+                                    })
+                                }
                             />
 
                             <Checkbox
                                 label={marketingLabel}
                                 name="marketing"
-                                value={marketing}
-                                onChange={() => setMarketing(!marketing)}
+                                value={cookieOptions.marketing ?? false}
+                                onChange={() =>
+                                    setCookieOptions({
+                                        ...cookieOptions,
+                                        marketing: !cookieOptions.marketing,
+                                    })
+                                }
                             />
                         </div>
                         <div className="cookiebanner__button-container">
                             <button
                                 className="cookiebanner__button cookiebanner__save-button"
-                                onClick={() =>
-                                    onSetCookies({
-                                        functional,
-                                        analytics,
-                                        marketing,
-                                    })
-                                }
+                                onClick={() => {
+                                    setCookieSettings(cookieOptions);
+                                    setCookieBannerIsOpen(false);
+                                }}
                             >
                                 {saveLabel}
                             </button>
                             <button
                                 className="cookiebanner__button cookiebanner__button--primary cookiebanner__accept-all-button"
-                                onClick={() =>
-                                    onSetCookies({
-                                        functional: true,
-                                        analytics: true,
-                                        marketing: true,
-                                    })
-                                }
+                                onClick={() => onAcceptAll()}
                             >
                                 {acceptAllLabel}
                             </button>
