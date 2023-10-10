@@ -1,0 +1,16 @@
+{
+    "name": "@freshheads/cookie-guard-example-chakra-ui",
+    "private": true,
+    "version": "1.0.0",
+    "author": "Freshheads",
+    "license": "MIT",
+    "dependencies": {
+        "@chakra-ui/react": "^2.8.1",
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@freshheads/cookie-guard": "^4.0.0-alpha.4",
+        "framer-motion": "^10.16.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    }
+}

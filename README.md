@@ -69,8 +69,6 @@ return (
 
 -   You can also use the hooks to make your own custom cookiebanner
 
-TODO: explain hooks with chakraui example
+## Examples
 
-```jsx
-
-```
+-   [Chakra-UI](examples/ChakraUI) custom cookie banner
