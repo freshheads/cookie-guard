@@ -6,6 +6,11 @@ The cookie settings are stored as follows:
 
 `'["functional","analytics","marketing"]'`
 
+## Setup with @freshheads/analytics-essentials
+
+-   [Gtag & analytics-essentials setup](doc/gtag_setup.md)
+-   [Tag Manager & analytics-essentials setup](doc/tagmanager_setup.md)
+
 ## Usage
 
 You can use the build in cookieguard to get up and running quickly or use the provided hooks to make your own.
@@ -14,13 +19,13 @@ The cookiebanner makes use of Context to share the cookie state throughout the a
 
 -   Wrap your app with the Provider:
 
-    ```jsx
-    import { CookieGuardContextProvider } from '@freshheads/cookie-guard';
+```jsx
+import { CookieGuardContextProvider } from '@freshheads/cookie-guard';
 
-    <CookieGuardContextProvider>
-        <App />
-    </CookieGuardContextProvider>;
-    ```
+<CookieGuardContextProvider>
+    <App />
+</CookieGuardContextProvider>;
+```
 
 -   The provider optionally accepts:
 
@@ -32,37 +37,38 @@ The cookiebanner makes use of Context to share the cookie state throughout the a
 
 -   Add the premade Cookie Banner to your app
 
-    ```jsx
-    import {
-    CookieGuard,
-    CookieGuardContextProvider,
-    CookieGuardProps
-    } from '@freshheads/cookie-guard';
-    import '@freshheads/cookie-guard/dist/style.css';
+```jsx
+import {
+    CookieBanner,
+    CookieCategorySettings,
+    CookieGuardProvider
+} from '@freshheads/cookie-guard';
+import '@freshheads/cookie-guard/dist/style.css';
 
-    const CookieGuardProps = {
-        title: 'Onze site maakt gebruik van cookies.',
-        description:
-            'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
-        acceptAllLabel: 'Alle cookies accepteren',
-        saveLabel: 'Opslaan',
-        functionalLabel: 'Noodzakelijke cookies',
-        analyticsLabel: 'Analytische cookies',
-        marketingLabel: 'Marketing cookies',
-    }
-     <CookieGuardContextProvider>
-        <App/>
-        <CookieGuard {...CookieGuardProps}>
-    </CookieGuardContextProvider>
+const CookieGuardProps = {
+    title: 'Onze site maakt gebruik van cookies.',
+    description:
+        'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
+    acceptAllLabel: 'Alle cookies accepteren',
+    saveLabel: 'Opslaan',
+    requiredLabel: 'Noodzakelijke cookies'.
+    functionalLabel: 'Noodzakelijke cookies',
+    analyticsLabel: 'Analytische cookies',
+    marketingLabel: 'Marketing cookies',
+}
 
-    ```
+return (
+    <CookieGuardProvider>
+        {/** your app components **/}
+        <CookieBanner {...CookieGuardProps} />
+    </CookieGuardProvider>
+);
+```
 
 -   To style look at the source code `/src/popupstyles.css` and import your own css.
 
 -   You can also use the hooks to make your own custom cookiebanner
 
-TODO: explain hooks with chakraui example
+## Examples
 
-```jsx
-
-```
+-   [Chakra-UI](examples/ChakraUI) custom cookie banner
