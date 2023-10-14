@@ -52,7 +52,7 @@ const CookieGuardProps = {
     acceptAllLabel: 'Alle cookies accepteren',
     saveLabel: 'Opslaan',
     requiredLabel: 'Noodzakelijke cookies'.
-    functionalLabel: 'Noodzakelijke cookies',
+    functionalLabel: 'Functionele cookies',
     analyticsLabel: 'Analytische cookies',
     marketingLabel: 'Marketing cookies',
 }
