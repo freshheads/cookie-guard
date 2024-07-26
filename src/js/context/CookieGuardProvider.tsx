@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { setCookies as setBrowserCookies } from '../util/cookieFunctions';
 import { CookieGuardContext } from './CookieGuardContext';
