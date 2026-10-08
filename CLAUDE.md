@@ -8,10 +8,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Development needs Node.js ≥ 22.12 (`devEngines`). npm 10.9+ enforces it; 10.8 and older ignore it.
 
-- `npm run build`: `tsc` (typecheck only, `noEmit`) followed by `vite build` in library mode. Writes `dist/` (`index.js`, `index.cjs`, `style.css`, `.d.ts` files via `vite-plugin-dts`). Also runs on `npm ci`/`npm install` through `prepare`. The visualizer plugin opens `analyse.html` in the browser on every build.
+- `npm run build`: `tsc` (typecheck only, `noEmit`) followed by `vite build` in library mode. Writes `dist/` (`index.js`, `index.cjs`, `style.css`, `.d.ts` files via `vite-plugin-dts`). Also runs on `npm ci`/`npm install` through `prepare`.
+- `npm run analyze`: library build plus a bundle-size treemap (`rollup-plugin-visualizer`, only in `--mode analyze`). Writes `analyse.html` (gitignored) and opens it in the browser.
 - `npm run dev`: Vite dev server for the playground (`index.html` → `src/js/main.tsx` → `components/App.tsx`). This is the only way to try the library in this repo.
 - `npm run prettier`: formats `src/**/*.{ts,tsx}` in place. Config is `.prettierrc` (4 spaces, single quotes, es5 trailing commas). Docs, examples and config files aren't covered; check them with `node_modules/.bin/prettier --check <files>`.
-- `npm run preview`: serves `dist/`. There is no `index.html` in a library build, so `/` returns 404.
 
 There are no tests and no ESLint setup. To verify consumer-facing behaviour, `npm pack` the library and install the tarball into a throwaway app outside the repo (React 18, React 19, Next.js).
 

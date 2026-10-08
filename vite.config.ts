@@ -10,7 +10,7 @@ const externalPackages = [
     ...Object.keys(pkg.peerDependencies),
 ];
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     build: {
         lib: {
             entry: resolve(import.meta.dirname, 'src/js/index.ts'),
@@ -41,12 +41,13 @@ export default defineConfig({
                 'src/js/components/NeedsCookies.tsx',
             ],
         }),
-        visualizer({
-            template: 'treemap', // or sunburst
-            open: true,
-            gzipSize: true,
-            brotliSize: true,
-            filename: 'analyse.html', // will be saved in project's root
-        }),
+        mode === 'analyze' &&
+            visualizer({
+                template: 'treemap', // or sunburst
+                open: true,
+                gzipSize: true,
+                brotliSize: true,
+                filename: 'analyse.html', // will be saved in project's root
+            }),
     ],
-});
+}));
