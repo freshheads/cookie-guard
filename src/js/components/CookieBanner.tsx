@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { Description, Dialog, DialogTitle } from '@headlessui/react';
 import { useCookies } from '../hooks/useCookies';
 import { Checkbox } from './Checkbox';
 
 export type CookieBannerProps = {
     title: string;
-    description: JSX.Element | string;
+    description: ReactNode;
     acceptAllLabel: string;
     saveLabel: string;
     requiredLabel: string;
@@ -71,13 +71,11 @@ export const CookieBanner: FC<CookieBannerProps> = ({
             className="cookiebanner"
         >
             <div className="cookiebanner__backdrop" aria-hidden="true" />
-            <div className="cookiebanner__scroll-container" aria-hidden="true">
+            <div className="cookiebanner__scroll-container">
                 <div className="cookiebanner__container">
                     <div className="cookiebanner__content">
-                        <Dialog.Title as="h2">{title}</Dialog.Title>
-                        <Dialog.Description as="div">
-                            {description}
-                        </Dialog.Description>
+                        <DialogTitle as="h2">{title}</DialogTitle>
+                        <Description as="div">{description}</Description>
                         <div className="cookiebanner__options">
                             <Checkbox
                                 label={requiredLabel}

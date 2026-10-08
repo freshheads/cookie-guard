@@ -39,30 +39,34 @@
     "devDependencies": {
         "@types/js-cookie": "^3.0.3",
         "@types/node": "^18.16.2",
-        "@types/react": "^18.0.31",
-        "@types/react-dom": "^18.0.11",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react": "^4.0.0",
         "path": "^0.12.7",
         "postcss-nesting": "^11.2.2",
         "prettier": "^2.8.7",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
+        "react": "19.3.0",
+        "react-dom": "19.3.0",
         "rollup-plugin-visualizer": "^5.9.0",
         "typescript": "^5.0.4",
         "vite": "^4.2.0",
         "vite-plugin-dts": "^2.3.0"
     },
     "dependencies": {
-        "@headlessui/react": "^1.7.14",
-        "js-cookie": "^3.0.5"
+        "@headlessui/react": "^2.2.10",
+        "js-cookie": "^3.0.8"
     },
     "peerDependencies": {
-        "react": ">=17",
-        "react-dom": ">=17"
+        "react": ">=18",
+        "react-dom": ">=18"
     },
     "homepage": "https://github.com/freshheads/cookie-guard#readme",
     "directories": {
         "doc": "doc",
         "lib": "dist"
+    },
+    "allowScripts": {
+        "esbuild": false,
+        "fsevents": false
     }
 }

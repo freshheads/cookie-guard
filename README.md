@@ -6,6 +6,11 @@ The cookie settings are stored as follows:
 
 `'["functional","analytics","marketing"]'`
 
+## Requirements
+
+-   React 18 or 19 (`react` and `react-dom` are peer dependencies)
+-   Upgrading from 4.x? See [UPGRADE-5.0.md](UPGRADE-5.0.md)
+
 ## Setup with @freshheads/analytics-essentials
 
 -   [Gtag & analytics-essentials setup](doc/gtag_setup.md)
@@ -20,18 +25,19 @@ The cookiebanner makes use of Context to share the cookie state throughout the a
 -   Wrap your app with the Provider:
 
 ```jsx
-import { CookieGuardContextProvider } from '@freshheads/cookie-guard';
+import { CookieGuardProvider } from '@freshheads/cookie-guard';
 
-<CookieGuardContextProvider>
+<CookieGuardProvider>
     <App />
-</CookieGuardContextProvider>;
+</CookieGuardProvider>;
 ```
 
 -   The provider optionally accepts:
 
-    -   onCookiesChange
-    -   onCookiesSet
-    -   onCookiesCleared
+    -   onCookieSettingsChange
+    -   onCookieSettingsSet
+    -   onCookieSettingsClear
+    -   reloadOnRetractCookies
 
     e.g. If you want to change the Google consent options based on the cookie settings
 
@@ -41,7 +47,7 @@ import { CookieGuardContextProvider } from '@freshheads/cookie-guard';
 import {
     CookieBanner,
     CookieCategorySettings,
-    CookieGuardProvider
+    CookieGuardProvider,
 } from '@freshheads/cookie-guard';
 import '@freshheads/cookie-guard/dist/style.css';
 
@@ -51,11 +57,11 @@ const CookieGuardProps = {
         'Wij gebruiken cookies voor de werking van de website, analyse en verbetering en marketingdoeleinden.',
     acceptAllLabel: 'Alle cookies accepteren',
     saveLabel: 'Opslaan',
-    requiredLabel: 'Noodzakelijke cookies'.
+    requiredLabel: 'Noodzakelijke cookies',
     functionalLabel: 'Functionele cookies',
     analyticsLabel: 'Analytische cookies',
     marketingLabel: 'Marketing cookies',
-}
+};
 
 return (
     <CookieGuardProvider>
@@ -68,6 +74,10 @@ return (
 -   To style look at the source code `/src/popupstyles.css` and import your own css.
 
 -   You can also use the hooks to make your own custom cookiebanner
+
+## Development
+
+The project `.npmrc` only installs versions that are at least 7 days old and fails on unreviewed install scripts. Review new ones with `npm install-scripts approve <pkg>` or `npm install-scripts deny <pkg>` (recorded in `allowScripts` in `package.json`).
 
 ## Examples
 

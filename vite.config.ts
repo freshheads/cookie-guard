@@ -3,6 +3,12 @@ import { PluginOption, defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
+import pkg from './package.json';
+
+const externalPackages = [
+    ...Object.keys(pkg.dependencies),
+    ...Object.keys(pkg.peerDependencies),
+];
 
 export default defineConfig({
     build: {
@@ -13,10 +19,25 @@ export default defineConfig({
             ],
         },
         rollupOptions: {
-            external: ['react', 'react-dom'],
+            // Subpaths too: a bundled react/jsx-runtime crashes on a different React major.
+            external: (id) =>
+                externalPackages.some(
+                    (name) => id === name || id.startsWith(`${name}/`)
+                ),
         },
     },
     plugins: [
+        {
+            // Bundling and minifying drop module-level directives (also output.banner), so prepend it last.
+            name: 'use-client-directive',
+            generateBundle(_, bundle) {
+                for (const chunk of Object.values(bundle)) {
+                    if (chunk.type === 'chunk' && chunk.name === 'index') {
+                        chunk.code = `'use client';\n${chunk.code}`;
+                    }
+                }
+            },
+        },
         react(),
         dts(),
         visualizer({
