@@ -16,6 +16,9 @@ export const setCookies = (
         mainDomain,
     ];
 
+    // Otherwise a leftover host-only or domain variant would shadow the new value on read.
+    removeCookies(name);
+
     if (allDomains.includes(document.location.hostname)) {
         Cookies.set(name, value, {
             expires: durationInDays,
@@ -25,5 +28,17 @@ export const setCookies = (
         Cookies.set(name, value, {
             expires: durationInDays,
         });
+    }
+};
+
+// A domain cookie is only removed with its domain, which may come from an earlier session, so try every parent domain.
+export const removeCookies = (name: string) => {
+    if (typeof document === 'undefined') return;
+
+    Cookies.remove(name);
+
+    const labels = document.location.hostname.split('.');
+    for (let i = 0; i < labels.length - 1; i++) {
+        Cookies.remove(name, { domain: labels.slice(i).join('.') });
     }
 };

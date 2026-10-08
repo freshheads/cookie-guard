@@ -1,12 +1,69 @@
 'use client';
 
-import { FC, ReactNode, useEffect, useState } from 'react';
-import { setCookies as setBrowserCookies } from '../util/cookieFunctions';
+import {
+    FC,
+    ReactNode,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    useSyncExternalStore,
+} from 'react';
+import {
+    removeCookies as removeBrowserCookies,
+    setCookies as setBrowserCookies,
+} from '../util/cookieFunctions';
 import { CookieGuardContext } from './CookieGuardContext';
 import Cookies from 'js-cookie';
 import { CookieCategory, CookieCategorySettings } from '../types/cookies';
 
 export const cookieSettingsName = 'cookies_consent';
+
+const consentCookieListeners = new Set<() => void>();
+
+const subscribeToConsentCookie = (listener: () => void) => {
+    consentCookieListeners.add(listener);
+    return () => {
+        consentCookieListeners.delete(listener);
+    };
+};
+
+// Wins over the cookie once written ('' after a clear), so a blocked cookie write still applies this session.
+let sessionConsentCookie: string | undefined;
+
+// js-cookie has no change events, so every write in this provider notifies subscribers itself.
+const setSessionConsentCookie = (value: string) => {
+    sessionConsentCookie = value;
+    consentCookieListeners.forEach((listener) => listener());
+};
+
+// The raw string keeps the snapshot stable between reads (a parsed object would be new each time).
+const getConsentCookie = () =>
+    sessionConsentCookie ?? Cookies.get(cookieSettingsName);
+
+// null marks server rendering and hydration; React re-renders with the client snapshot right after.
+const getServerConsentCookie = () => null;
+
+const parseCookieSettings = (
+    consentCookie: string | null | undefined
+): CookieCategorySettings => {
+    if (!consentCookie) return undefined;
+
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(consentCookie);
+    } catch {
+        return undefined;
+    }
+    if (typeof parsed !== 'object' || parsed === null) return undefined;
+
+    const settings: NonNullable<CookieCategorySettings> = {};
+    for (const category of Object.values(CookieCategory)) {
+        const value: unknown = Reflect.get(parsed, category);
+        if (typeof value === 'boolean') settings[category] = value;
+    }
+    return settings;
+};
 
 export type CookieGuardsContextProviderProps = {
     children: ReactNode;
@@ -23,17 +80,29 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
     onCookieSettingsClear,
     reloadOnRetractCookies = false,
 }) => {
-    const currentCookies = Cookies.get(cookieSettingsName);
-    const initialState = currentCookies
-        ? (JSON.parse(currentCookies) as CookieCategorySettings)
-        : undefined;
-
-    const [cookiebannerIsOpen, setCookieBannerIsOpen] = useState<boolean>(
-        currentCookies ? false : true
+    const consentCookie = useSyncExternalStore(
+        subscribeToConsentCookie,
+        getConsentCookie,
+        getServerConsentCookie
+    );
+    const isServerSnapshot = consentCookie === null;
+    const cookieSettings = useMemo(
+        () => parseCookieSettings(consentCookie),
+        [consentCookie]
     );
 
-    const [cookieSettings, setCookieSettings] =
-        useState<CookieCategorySettings>(initialState);
+    // undefined: follow the cookie (open without consent); otherwise opened or closed explicitly.
+    const [cookieBannerIsOpenOverride, setCookieBannerIsOpen] = useState<
+        boolean | undefined
+    >(undefined);
+    const cookiebannerIsOpen =
+        cookieBannerIsOpenOverride ?? (!isServerSnapshot && !cookieSettings);
+
+    const writeSessionConsentCookie = (value: string) => {
+        // Writing or clearing consent must not toggle the banner by itself, as before.
+        setCookieBannerIsOpen((isOpen) => isOpen ?? cookiebannerIsOpen);
+        setSessionConsentCookie(value);
+    };
 
     const onCookieSettingRetract = () => {
         /*
@@ -47,9 +116,16 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
         reloadOnRetractCookies && window.location.reload();
     };
 
+    // Via a ref: an inline callback prop is new every render and must not re-fire the effect below.
+    const onCookieSettingsChangeRef = useRef(onCookieSettingsChange);
     useEffect(() => {
-        onCookieSettingsChange && onCookieSettingsChange(cookieSettings);
-    }, [cookieSettings]);
+        onCookieSettingsChangeRef.current = onCookieSettingsChange;
+    });
+
+    useEffect(() => {
+        if (isServerSnapshot) return;
+        onCookieSettingsChangeRef.current?.(cookieSettings);
+    }, [cookieSettings, isServerSnapshot]);
 
     const onSetCookieSettings = (
         newCookieSettings: CookieCategorySettings,
@@ -58,52 +134,44 @@ export const CookieGuardProvider: FC<CookieGuardsContextProviderProps> = ({
     ) => {
         if (!newCookieSettings) return;
         if (Object.keys(newCookieSettings).length === 0) return;
-        let hasRetractedCookies = false;
+        // Read from the store: a handler captured during hydration still has cookieSettings === undefined.
+        const storedCookieSettings = parseCookieSettings(getConsentCookie());
 
         /*
             Since tags cannot be removed from the browser we need to refresh if a
             cookie value is changed from true to false to remove all tags that were
             set when the value was true.
         */
-
-        if (cookieSettings) {
-            if (
-                (cookieSettings.analytics &&
-                    newCookieSettings.analytics === false) ||
-                (cookieSettings.marketing &&
-                    newCookieSettings.marketing === false) ||
-                (cookieSettings.functional &&
-                    newCookieSettings.functional === false) ||
-                (cookieSettings.required &&
-                    newCookieSettings.required === false)
-            ) {
-                hasRetractedCookies = true;
-            }
-        }
+        const hasRetractedCookies = Object.values(CookieCategory).some(
+            (category) =>
+                storedCookieSettings?.[category] &&
+                newCookieSettings[category] === false
+        );
 
         const cookiesToSet = {
-            ...cookieSettings,
+            ...storedCookieSettings,
             ...newCookieSettings,
             required: true,
         };
+        const consentCookieValue = JSON.stringify(cookiesToSet);
 
         setBrowserCookies(
             cookieSettingsName,
-            JSON.stringify(cookiesToSet),
+            consentCookieValue,
             7,
             subdomains,
             domain
         );
 
-        setCookieSettings(cookiesToSet);
+        writeSessionConsentCookie(consentCookieValue);
         onCookieSettingsSet && onCookieSettingsSet(cookiesToSet);
         hasRetractedCookies && onCookieSettingRetract();
     };
 
     const clearCookieSettings = () => {
         if (typeof document === 'undefined') return;
-        setCookieSettings(undefined);
-        Cookies.remove(cookieSettingsName);
+        removeBrowserCookies(cookieSettingsName);
+        writeSessionConsentCookie('');
         /*
             Since tags cannot be removed from the browser we need to refresh if a
             cookie value is changed from true to false to remove all tags that were
