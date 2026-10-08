@@ -1,11 +1,19 @@
-import { FC, useEffect, useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import { FC, ReactNode, useState } from 'react';
+import { Description, Dialog, DialogTitle } from '@headlessui/react';
 import { useCookies } from '../hooks/useCookies';
+import { CookieCategorySettings } from '../types/cookies';
 import { Checkbox } from './Checkbox';
+
+const toCookieOptions = (cookieSettings: CookieCategorySettings) => ({
+    required: cookieSettings?.required ?? false,
+    functional: cookieSettings?.functional ?? false,
+    analytics: cookieSettings?.analytics ?? false,
+    marketing: cookieSettings?.marketing ?? false,
+});
 
 export type CookieBannerProps = {
     title: string;
-    description: JSX.Element | string;
+    description: ReactNode;
     acceptAllLabel: string;
     saveLabel: string;
     requiredLabel: string;
@@ -34,26 +42,17 @@ export const CookieBanner: FC<CookieBannerProps> = ({
         To prevent the cookie banner changing the settings without pressing save,
         we need to keep track of the options in the banner itself. 
     */
-    const [cookieOptions, setCookieOptions] = useState<{
-        required: boolean;
-        functional: boolean;
-        analytics: boolean;
-        marketing: boolean;
-    }>({
-        required: cookieSettings?.required ?? false,
-        functional: cookieSettings?.functional ?? false,
-        analytics: cookieSettings?.analytics ?? false,
-        marketing: cookieSettings?.marketing ?? false,
-    });
+    const [cookieOptions, setCookieOptions] = useState(() =>
+        toCookieOptions(cookieSettings)
+    );
 
-    useEffect(() => {
-        setCookieOptions({
-            required: cookieSettings?.required ?? false,
-            functional: cookieSettings?.functional ?? false,
-            analytics: cookieSettings?.analytics ?? false,
-            marketing: cookieSettings?.marketing ?? false,
-        });
-    }, [cookieSettings]);
+    // Reset the options when the stored settings change, during render instead of in an effect.
+    const [syncedCookieSettings, setSyncedCookieSettings] =
+        useState(cookieSettings);
+    if (cookieSettings !== syncedCookieSettings) {
+        setSyncedCookieSettings(cookieSettings);
+        setCookieOptions(toCookieOptions(cookieSettings));
+    }
 
     const onAcceptAll = () => {
         setCookieSettings({
@@ -71,13 +70,11 @@ export const CookieBanner: FC<CookieBannerProps> = ({
             className="cookiebanner"
         >
             <div className="cookiebanner__backdrop" aria-hidden="true" />
-            <div className="cookiebanner__scroll-container" aria-hidden="true">
+            <div className="cookiebanner__scroll-container">
                 <div className="cookiebanner__container">
                     <div className="cookiebanner__content">
-                        <Dialog.Title as="h2">{title}</Dialog.Title>
-                        <Dialog.Description as="div">
-                            {description}
-                        </Dialog.Description>
+                        <DialogTitle as="h2">{title}</DialogTitle>
+                        <Description as="div">{description}</Description>
                         <div className="cookiebanner__options">
                             <Checkbox
                                 label={requiredLabel}

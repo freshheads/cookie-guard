@@ -1,10 +1,10 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import { CookieGuardProvider } from './context/CookieGuardProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
+    <StrictMode>
         <CookieGuardProvider
             onCookieSettingsChange={(cookieSettings) =>
                 console.log('cookies changed', cookieSettings)
@@ -15,5 +15,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         >
             <App />
         </CookieGuardProvider>
-    </React.StrictMode>
+    </StrictMode>
 );

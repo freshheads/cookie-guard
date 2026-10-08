@@ -5,12 +5,10 @@
     "author": "Freshheads",
     "license": "MIT",
     "dependencies": {
-        "@chakra-ui/react": "^2.8.1",
-        "@emotion/react": "^11.11.1",
-        "@emotion/styled": "^11.11.0",
-        "@freshheads/cookie-guard": "^4.0.0-alpha.4",
-        "framer-motion": "^10.16.4",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "@chakra-ui/react": "^3.37.0",
+        "@emotion/react": "^11.14.0",
+        "@freshheads/cookie-guard": "^5.0.0",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
     }
 }

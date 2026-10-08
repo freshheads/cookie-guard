@@ -1,18 +1,37 @@
 import {
     Button,
     Checkbox,
+    Dialog,
     HStack,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalHeader,
-    ModalOverlay,
+    Portal,
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useCookies } from '@freshheads/cookie-guard';
-import React from 'react';
-import { FC, useEffect, useState } from 'react';
+import { CookieCategorySettings, useCookies } from '@freshheads/cookie-guard';
+import { FC, useState } from 'react';
+
+type CookieOptions = {
+    required: boolean;
+    functional: boolean;
+    analytics: boolean;
+    marketing: boolean;
+};
+
+const toCookieOptions = (
+    cookieSettings: CookieCategorySettings
+): CookieOptions => ({
+    required: cookieSettings?.required ?? true,
+    functional: cookieSettings?.functional ?? false,
+    analytics: cookieSettings?.analytics ?? false,
+    marketing: cookieSettings?.marketing ?? false,
+});
+
+const categories: { category: keyof CookieOptions; label: string }[] = [
+    { category: 'required', label: 'Noodzakelijke cookies' },
+    { category: 'functional', label: 'Functionele cookies' },
+    { category: 'analytics', label: 'Analytische cookies' },
+    { category: 'marketing', label: 'Marketing cookies' },
+];
 
 const CookieBannerPrimitive: FC = () => {
     const {
@@ -23,28 +42,19 @@ const CookieBannerPrimitive: FC = () => {
     } = useCookies();
     /*
         To prevent the cookie banner changing the settings without pressing save,
-        we need to keep track of the options in the banner itself. 
+        we need to keep track of the options in the banner itself.
     */
-    const [cookieOptions, setCookieOptions] = useState<{
-        required: boolean;
-        functional: boolean;
-        analytics: boolean;
-        marketing: boolean;
-    }>({
-        required: cookieSettings?.required ?? true,
-        functional: cookieSettings?.functional ?? false,
-        analytics: cookieSettings?.analytics ?? false,
-        marketing: cookieSettings?.marketing ?? false,
-    });
+    const [cookieOptions, setCookieOptions] = useState(() =>
+        toCookieOptions(cookieSettings)
+    );
 
-    useEffect(() => {
-        setCookieOptions({
-            required: cookieSettings?.required ?? true,
-            functional: cookieSettings?.functional ?? false,
-            analytics: cookieSettings?.analytics ?? false,
-            marketing: cookieSettings?.marketing ?? false,
-        });
-    }, [cookieSettings]);
+    // Reset the options when the stored settings change, during render instead of in an effect.
+    const [syncedCookieSettings, setSyncedCookieSettings] =
+        useState(cookieSettings);
+    if (cookieSettings !== syncedCookieSettings) {
+        setSyncedCookieSettings(cookieSettings);
+        setCookieOptions(toCookieOptions(cookieSettings));
+    }
 
     const onAcceptAll = () => {
         setCookieSettings({
@@ -55,87 +65,75 @@ const CookieBannerPrimitive: FC = () => {
         setCookieBannerIsOpen(false);
     };
 
+    const toggle = (category: keyof CookieOptions) =>
+        setCookieOptions({
+            ...cookieOptions,
+            [category]: !cookieOptions[category],
+        });
+
     return (
-        <Modal
-            isOpen={cookieBannerIsOpen}
-            onClose={() => {}}
-            isCentered
-            size={'2xl'}
-            closeOnEsc={false}
-            closeOnOverlayClick={false}
+        <Dialog.Root
+            open={cookieBannerIsOpen}
+            placement="center"
+            size="xl"
+            closeOnEscape={false}
+            closeOnInteractOutside={false}
         >
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Onze site maakt gebruik van cookies</ModalHeader>
-                <ModalBody>
-                    <Text mb={4}>
-                        Wij gebruiken cookies voor de werking van de website,
-                        analyse en verbetering en marketingdoeleinden.
-                    </Text>
+            <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content>
+                        <Dialog.Header>
+                            <Dialog.Title>
+                                Onze site maakt gebruik van cookies
+                            </Dialog.Title>
+                        </Dialog.Header>
+                        <Dialog.Body>
+                            <Text mb={4}>
+                                Wij gebruiken cookies voor de werking van de
+                                website, analyse en verbetering en
+                                marketingdoeleinden.
+                            </Text>
 
-                    <VStack alignItems={'flex-start'} mb={4}>
-                        <Checkbox
-                            isChecked={cookieOptions.required}
-                            isDisabled={true}
-                        >
-                            Noodzakelijke cookies
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={cookieOptions.functional}
-                            onChange={() =>
-                                setCookieOptions({
-                                    ...cookieOptions,
-                                    functional: !cookieOptions.functional,
-                                })
-                            }
-                        >
-                            Functionele cookies
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={cookieOptions.analytics}
-                            onChange={() =>
-                                setCookieOptions({
-                                    ...cookieOptions,
-                                    analytics: !cookieOptions.analytics,
-                                })
-                            }
-                        >
-                            Analytische cookies
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={cookieOptions.marketing}
-                            onChange={() =>
-                                setCookieOptions({
-                                    ...cookieOptions,
-                                    marketing: !cookieOptions.marketing,
-                                })
-                            }
-                        >
-                            Marketing cookies
-                        </Checkbox>
-                    </VStack>
+                            <VStack alignItems="flex-start" mb={4}>
+                                {categories.map(({ category, label }) => (
+                                    <Checkbox.Root
+                                        key={category}
+                                        checked={cookieOptions[category]}
+                                        disabled={category === 'required'}
+                                        onCheckedChange={() => toggle(category)}
+                                    >
+                                        <Checkbox.HiddenInput />
+                                        <Checkbox.Control />
+                                        <Checkbox.Label>{label}</Checkbox.Label>
+                                    </Checkbox.Root>
+                                ))}
+                            </VStack>
 
-                    <HStack alignItems={'center'}>
-                        <Button
-                            flex={1}
-                            onClick={() => {
-                                setCookieSettings(cookieOptions);
-                                setCookieBannerIsOpen(false);
-                            }}
-                        >
-                            Opslaan
-                        </Button>
-                        <Button
-                            flex={1}
-                            colorScheme="blue"
-                            onClick={onAcceptAll}
-                        >
-                            Alles cookies accepteren
-                        </Button>
-                    </HStack>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
+                            <HStack alignItems="center">
+                                <Button
+                                    flex={1}
+                                    variant="subtle"
+                                    onClick={() => {
+                                        setCookieSettings(cookieOptions);
+                                        setCookieBannerIsOpen(false);
+                                    }}
+                                >
+                                    Opslaan
+                                </Button>
+                                <Button
+                                    flex={1}
+                                    colorPalette="blue"
+                                    onClick={onAcceptAll}
+                                >
+                                    Alle cookies accepteren
+                                </Button>
+                            </HStack>
+                        </Dialog.Body>
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Portal>
+        </Dialog.Root>
     );
 };
 
